@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -23,16 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BeatFranticallyIdleTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(modifier = Modifier)
-                    },
-                    bottomBar = {
-                        BottomAppBar(modifier = Modifier.height(92.dp))
-                    },
-                ) { paddingValues ->
-                    AppIdle(modifier = Modifier.padding(paddingValues))
-                }
+                AppIdle()
             }
         }
     }
@@ -42,18 +32,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PreviewAppIdle() {
     BeatFranticallyIdleTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(modifier = Modifier.height(70.dp))
-            },
-            bottomBar = {
-                BottomAppBar(modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth())
-            },
-        ) { paddingValues ->
-            AppIdle(modifier = Modifier.padding(paddingValues))
-        }
+        AppIdle()
     }
 }
+
 
