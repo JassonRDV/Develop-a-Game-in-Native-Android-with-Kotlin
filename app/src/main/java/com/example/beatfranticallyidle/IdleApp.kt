@@ -1,110 +1,61 @@
 package com.example.beatfranticallyidle
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Construction
-import androidx.compose.material.icons.filled.RestaurantMenu
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.beatfranticallyidle.screen.BottomBar
-import com.example.beatfranticallyidle.screen.CardBoard
-import com.example.beatfranticallyidle.screen.MonsterBoard
-import com.example.beatfranticallyidle.screen.TopBar
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.example.beatfranticallyidle.data.card.CardInfo
+import com.example.beatfranticallyidle.data.card.listHero
+import com.example.beatfranticallyidle.ui.components.mainscreen.BottomBar
+import com.example.beatfranticallyidle.ui.components.mainscreen.TopBar
+import com.example.beatfranticallyidle.ui.screen.MainScreen
+import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
+
+sealed class HeroCardRoute(val route: String) {
+    object FireHero : HeroCardRoute("FireHero")
+    object LightningHero : HeroCardRoute("LightningHero")
+    object PoisonHero : HeroCardRoute("PoisonHero")
+}
 
 @Composable
-fun AppIdle(modifier: Modifier = Modifier) {
+fun AppIdle(
+    listHeroes: List<List<CardInfo.Card>> = listHero,
+    viewModel: MonsterViewModel = viewModel(),
+    modifier: Modifier = Modifier
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val navController = rememberNavController()
     Scaffold(
-        containerColor = Color.Transparent,
-        contentColor = Color.Transparent,
         topBar = {
-            TopBar(modifier = Modifier)
+            TopBar(
+                backgroundColor = Color(0x50000000),
+                modifier = Modifier
+            )
         },
         bottomBar = {
-            BottomBar(modifier = Modifier.height(92.dp))
+            BottomBar(
+                backgroundColor = Color(0x50000000),
+                navController = navController,
+                modifier = Modifier.height(92.dp)
+            )
         },
+        containerColor = Color.Transparent,
+        contentColor = Color.Transparent,
+        modifier = modifier
     ) { paddingValues ->
-        ModalNavigationDrawer(
-            drawerContent = {
-                ModalDrawerSheet(
-                    drawerContainerColor = Color.Transparent,
-                    modifier = Modifier
-                        .width(100.dp)
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.parede_de_madeira),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.size(800.dp)
-                        )
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.SpaceAround
-                        ) {
-                            IconButton(onClick = {}) {
-                                Icon(
-                                    imageVector = Icons.Default.RestaurantMenu,
-                                    contentDescription = null
-                                )
-                            }
-                            IconButton(onClick = {}) {
-                                Icon(
-                                    imageVector = Icons.Default.Construction,
-                                    contentDescription = null
-                                )
-                            }
-                            IconButton(onClick = {}) {
-                                Icon(
-                                    imageVector = Icons.Default.Construction,
-                                    contentDescription = null
-                                )
-                            }
-                            IconButton(onClick = {}) {
-                                Icon(
-                                    imageVector = Icons.Default.Construction,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        ) {
-            Column(
-                modifier = modifier.padding(paddingValues)
-            ) {
-                MonsterBoard(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
-                CardBoard(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
-            }
-        }
+        MainScreen(
+            listHeroes = listHeroes,
+            viewModel = viewModel,
+            uiState = uiState,
+            navController = navController,
+            modifier = Modifier,
+            paddingValues = paddingValues
+        )
     }
 }
