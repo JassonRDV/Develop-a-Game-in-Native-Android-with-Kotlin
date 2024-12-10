@@ -8,7 +8,8 @@ sealed class MonsterInfo {
     data class Monster(
         @DrawableRes val image: Int,
         val name: String,
-        val life: Float,
+        var currentLife: Float,
+        val maxLife: Float,
         val rewardType: RewardType,
         val rewardValue: Int,
         var numberOfDeaths: Int

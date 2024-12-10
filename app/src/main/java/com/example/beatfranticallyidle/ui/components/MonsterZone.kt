@@ -69,7 +69,7 @@ fun MonsterZone(
             IconAndCount(
                 uiState = uiState.rewardValue.toString(),
                 horArrangement = Arrangement.Start,
-                verAlignment = Alignment.Top,
+                verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_coin,
                 fontSize = 20,
                 modifier = Modifier
@@ -79,7 +79,7 @@ fun MonsterZone(
             IconAndCount(
                 uiState = uiState.allMonsterDeadCount.toString(),
                 horArrangement = Arrangement.Start,
-                verAlignment = Alignment.Bottom,
+                verAlignment = Alignment.Top,
                 iconImage = R.drawable.icone_caveira,
                 fontSize = 20,
                 modifier = Modifier

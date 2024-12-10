@@ -19,8 +19,8 @@ class MonsterViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 currentMonster = monsterList[0],
-                lifeMonster = monsterList[0].life,
-                maxLifeMonster = monsterList[0].life,
+                lifeMonster = monsterList[0].currentLife,
+                maxLifeMonster = monsterList[0].maxLife,
                 monsterImage = monsterList[0].image,
             )
         }
@@ -30,8 +30,8 @@ class MonsterViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 currentMonster = monsterList[1],
-                lifeMonster = monsterList[1].life,
-                maxLifeMonster = monsterList[1].life,
+                lifeMonster = monsterList[1].currentLife,
+                maxLifeMonster = monsterList[1].maxLife,
                 monsterImage = monsterList[1].image,
             )
         }
@@ -40,6 +40,7 @@ class MonsterViewModel : ViewModel() {
     fun monsterTookDamage() {
         viewModelScope.launch {
             _uiState.update { currentState ->
+                currentState.currentMonster.currentLife -= 1f
                 currentState.copy(
                     tookDamage = true,
                     lifeMonster = currentState.lifeMonster - 1f
@@ -59,6 +60,7 @@ class MonsterViewModel : ViewModel() {
         if (_uiState.value.lifeMonster == 0f) {
             viewModelScope.launch {
                 _uiState.update { currentState ->
+                    currentState.currentMonster.numberOfDeaths += 1
                     currentState.copy(
                         monsterDead = true,
                         allMonsterDeadCount = currentState.allMonsterDeadCount + 1,
@@ -68,17 +70,14 @@ class MonsterViewModel : ViewModel() {
                 }
                 delay(500)
                 _uiState.update { currentState ->
+                    currentState.currentMonster.currentLife =
+                        currentState.currentMonster.maxLife
                     currentState.copy(
                         monsterDead = false,
-                        lifeMonster = currentState.currentMonster.life,
+                        lifeMonster = currentState.currentMonster.currentLife,
                     )
                 }
             }
-            monsterDiedRewound()
         }
-    }
-    
-    private fun monsterDiedRewound() {
-        val monsterList = monsterList
     }
 }

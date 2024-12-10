@@ -10,6 +10,7 @@ sealed class CardInfo() {
         val attackDamage: Int,
         val typeDamage: TypeDamage,
         val effect: String,
+        val price: Int,
         @DrawableRes val image: Int
     )
 }
