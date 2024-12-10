@@ -4,10 +4,12 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,14 +37,16 @@ import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.data.monster.MonsterStage
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
+import com.example.beatfranticallyidle.viewmodel.HeroViewModel
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 
 @Composable
 fun MonsterZone(
-    modifier: Modifier = Modifier,
     viewModel: MonsterViewModel,
     uiState: MonsterStage,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
+    heroViewModel: HeroViewModel,
 ) {
     Box(
         modifier = modifier
@@ -66,16 +70,30 @@ fun MonsterZone(
                     .fillMaxSize()
                     .padding(60.dp)
             )
-            IconAndCount(
-                uiState = uiState.rewardValue.toString(),
-                horArrangement = Arrangement.Start,
-                verAlignment = Alignment.Bottom,
-                iconImage = R.drawable.icone_coin,
-                fontSize = 20,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
-            )
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                IconAndCount(
+                    uiState = uiState.rewardValue.toString(),
+                    horArrangement = Arrangement.Start,
+                    verAlignment = Alignment.Bottom,
+                    iconImage = R.drawable.icone_coin,
+                    fontSize = 20,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
+                )
+                Text(
+                    text = "COMPRA",
+                    fontSize = 20.sp,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .align(alignment = Alignment.BottomCenter)
+                        .background(Color.Green)
+                        .clickable { heroViewModel.compraCarta() }
+                )
+            }
             IconAndCount(
                 uiState = uiState.allMonsterDeadCount.toString(),
                 horArrangement = Arrangement.Start,

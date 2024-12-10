@@ -28,18 +28,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
-import com.example.beatfranticallyidle.data.card.CardInfo
+import com.example.beatfranticallyidle.R
+import com.example.beatfranticallyidle.data.card.HeroInfo
+import com.example.beatfranticallyidle.data.card.HeroState
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.CardViewModel
+import com.example.beatfranticallyidle.viewmodel.HeroViewModel
 
 @Composable
 fun HeroesZone(
     modifier: Modifier = Modifier,
-    listHeroes: List<CardInfo.Card>,
     background: Int,
     paddingValues: PaddingValues,
-    cardUiStage: List<CardInfo.Card>,
-    cardViewModel: CardViewModel
+    heroViewModel: HeroViewModel,
+    heroUiStage: HeroState,
+    typeHero: Int
 ) {
     val bottomPadding = paddingValues.calculateBottomPadding()
     Box(
@@ -61,56 +63,38 @@ fun HeroesZone(
                 modifier = Modifier.weight(1f)
             ) {
                 UnitCard(
-                    currentCard = listHeroes[0],
-                    cardViewModel = cardViewModel,
-                    effectUiStage = cardUiStage[0].effect,
-                    nameUiStage = cardUiStage[0].name,
-                    heroCard = listHeroes[0].image,
-                    modifier = modifier
+                    modifier = modifier,
+                    heroViewModel = heroViewModel,
+                    heroUiStage = heroUiStage.allListHero[typeHero][0],
                 )
                 UnitCard(
-                    currentCard = listHeroes[1],
-                    heroCard = listHeroes[1].image,
+                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    cardViewModel = cardViewModel,
-                    effectUiStage = cardUiStage[1].effect,
-                    nameUiStage = cardUiStage[1].name
+                    heroUiStage = heroUiStage.allListHero[typeHero][1],
                 )
                 UnitCard(
-                    currentCard = listHeroes[2],
-                    heroCard = listHeroes[2].image,
+                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    cardViewModel = cardViewModel,
-                    effectUiStage = cardUiStage[2].effect,
-                    nameUiStage = cardUiStage[2].name
+                    heroUiStage = heroUiStage.allListHero[typeHero][2],
                 )
             }
             Row(
                 modifier = Modifier.weight(1f)
             ) {
                 UnitCard(
-                    currentCard = listHeroes[3],
-                    heroCard = listHeroes[3].image,
+                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    cardViewModel = cardViewModel,
-                    effectUiStage = cardUiStage[3].effect,
-                    nameUiStage = cardUiStage[3].name
+                    heroUiStage = heroUiStage.allListHero[typeHero][3],
                 )
                 UnitCard(
-                    currentCard = listHeroes[4],
-                    heroCard = listHeroes[4].image,
+                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    cardViewModel = cardViewModel,
-                    effectUiStage = cardUiStage[4].effect,
-                    nameUiStage = cardUiStage[4].name
+                    heroUiStage = heroUiStage.allListHero[typeHero][4],
                 )
                 UnitCard(
-                    currentCard = listHeroes[5],
-                    heroCard = listHeroes[5].image,
+                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    cardViewModel = cardViewModel,
-                    effectUiStage = cardUiStage[5].effect,
-                    nameUiStage = cardUiStage[5].name
+                    heroUiStage = heroUiStage.allListHero[typeHero][5],
                 )
             }
         }
@@ -119,12 +103,28 @@ fun HeroesZone(
 
 @Composable
 fun UnitCard(
-    currentCard: CardInfo.Card,
-    heroCard: Int,
+    heroViewModel: HeroViewModel,
     modifier: Modifier = Modifier,
-    cardViewModel: CardViewModel,
-    effectUiStage: String,
-    nameUiStage: String
+    heroUiStage: HeroInfo.Hero,
+) {
+    if (heroUiStage.discovered) {
+        HeroRevealed(
+            heroViewModel = heroViewModel,
+            heroUiStage = heroUiStage,
+            modifier = modifier,
+        )
+    } else {
+        HeroHidden(
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+private fun HeroRevealed(
+    heroViewModel: HeroViewModel,
+    modifier: Modifier = Modifier,
+    heroUiStage: HeroInfo.Hero,
 ) {
     Box(
         modifier = modifier
@@ -133,12 +133,12 @@ fun UnitCard(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(heroCard),
+            painter = painterResource(heroUiStage.image),
             contentDescription = null,
             modifier = Modifier
                 .clickable(
                     role = Role.Image,
-                    onClick = { cardViewModel.showingCardFullScreen(currentCard) },
+                    onClick = { heroViewModel.showingCardFullScreen(heroUiStage) },
                 )
                 .border(2.dp, Color.White)
         )
@@ -148,7 +148,7 @@ fun UnitCard(
                 .fillMaxSize(),
         ) {
             Text(
-                text = nameUiStage,
+                text = heroUiStage.name,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 6.sp,
@@ -162,7 +162,7 @@ fun UnitCard(
                     .wrapContentSize()
             )
             Text(
-                text = effectUiStage,
+                text = heroUiStage.effect,
                 color = Color.White,
                 fontSize = 10.sp,
                 lineHeight = 12.sp,
@@ -174,6 +174,25 @@ fun UnitCard(
                     .wrapContentSize()
             )
         }
+    }
+}
+
+@Composable
+private fun HeroHidden(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .padding(8.dp)
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.card_null),
+            contentDescription = null,
+            modifier = Modifier
+                .border(2.dp, Color.Black)
+        )
     }
 }
 

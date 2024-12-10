@@ -1,7 +1,6 @@
 package com.example.beatfranticallyidle.ui.components.mainscreen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,16 +12,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.beatfranticallyidle.HeroCardRoute
 import com.example.beatfranticallyidle.R
+import com.example.beatfranticallyidle.viewmodel.HeroViewModel
 
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    backgroundColor: Color
+    backgroundColor: Color,
+    heroViewModel: HeroViewModel
 ) {
     Box(
         modifier = modifier,
@@ -41,8 +41,10 @@ fun BottomBar(
                     contentDescription = null,
                     modifier = Modifier.clickable {
                         if (navController.currentDestination?.route
-                            != HeroCardRoute.FireHero.route)
+                            != HeroCardRoute.FireHero.route) {
                             navController.navigate(HeroCardRoute.FireHero.route)
+                        }
+                        heroViewModel.updateListHero(0)
                     }
                 )
                 Image(
@@ -50,8 +52,11 @@ fun BottomBar(
                     contentDescription = null,
                     modifier = Modifier.clickable {
                         if (navController.currentDestination?.route
-                            != HeroCardRoute.PoisonHero.route)
-                        navController.navigate(HeroCardRoute.PoisonHero.route) }
+                            != HeroCardRoute.PoisonHero.route) {
+                        navController.navigate(HeroCardRoute.PoisonHero.route)
+                        }
+                        heroViewModel.updateListHero(1)
+                    }
                 )
             }
         }

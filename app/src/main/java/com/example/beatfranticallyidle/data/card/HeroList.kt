@@ -8,109 +8,97 @@ import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 
-private val listFireHeroes: List<CardInfo.Card> = listOf(
-    CardInfo.Card(
+val listFireHero: List<HeroInfo.Hero> = mutableListOf(
+    HeroInfo.Hero(
         name = "Espírito de Fogo",
         attackDamage = 1,
         typeDamage = TypeDamage.FIRE,
         effect = "Inflige 1 de dano de fogo por segundo",
-        price = 15,
         image = R.drawable.espiritofogo
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Doquinho de Fogo",
         attackDamage = 1,
         typeDamage = TypeDamage.FIRE,
         effect = "decidindo o efeito",
-        price = 30,
         image = R.drawable.card_doquinho_fogo
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Arqueira Incendiária",
         attackDamage = 1,
         typeDamage = TypeDamage.FIRE,
         effect = "decidindo o efeito",
-        price = 45,
         image = R.drawable.card_arqueira_incendiaria
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Mago de Fogo",
         attackDamage = 1,
         typeDamage = TypeDamage.FIRE,
         effect = "decidindo o efeito",
-        price = 60,
         image = R.drawable.magofogo
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Cavaleiro Solar",
         attackDamage = 1,
         typeDamage = TypeDamage.FIRE,
         effect = "decidindo o efeito",
-        price = 75,
         image = R.drawable.card_cavaleiro_solar
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Montador de Dragões",
         attackDamage = 1,
         typeDamage = TypeDamage.FIRE,
         effect = "decidindo o efeito",
-        price = 90,
         image = R.drawable.card_montador_dragao
     ),
 )
 
-private val listNoneHeroes: List<CardInfo.Card> = listOf(
-    CardInfo.Card(
+val listToxicHero: List<HeroInfo.Hero> = mutableListOf(
+    HeroInfo.Hero(
         name = "Quem será?",
         attackDamage = 1,
         typeDamage = TypeDamage.NONE,
         effect = "Qual será o seu efeito?",
-        price = 0,
         image = R.drawable.card_null
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Quem será?",
         attackDamage = 1,
         typeDamage = TypeDamage.NONE,
         effect = "Qual será o seu efeito?",
-        price = 0,
         image = R.drawable.card_null
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Quem será?",
         attackDamage = 1,
         typeDamage = TypeDamage.NONE,
         effect = "Qual será o seu efeito?",
-        price = 0,
         image = R.drawable.card_null
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Quem será?",
         attackDamage = 1,
         typeDamage = TypeDamage.NONE,
         effect = "Qual será o seu efeito?",
-        price = 0,
         image = R.drawable.card_null
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Quem será?",
         attackDamage = 1,
         typeDamage = TypeDamage.NONE,
         effect = "Qual será o seu efeito?",
-        price = 0,
         image = R.drawable.card_null
     ),
-    CardInfo.Card(
+    HeroInfo.Hero(
         name = "Quem será?",
         attackDamage = 1,
         typeDamage = TypeDamage.NONE,
         effect = "Qual será o seu efeito?",
-        price = 0,
         image = R.drawable.card_null
     ),
 )
 
-val listCard: List<List<CardInfo.Card>> = listOf(listFireHeroes, listNoneHeroes)
+val listAllHeroes: List<List<HeroInfo.Hero>> = listOf( listFireHero, listToxicHero)
 
 @Preview(showBackground = true)
 @Composable
