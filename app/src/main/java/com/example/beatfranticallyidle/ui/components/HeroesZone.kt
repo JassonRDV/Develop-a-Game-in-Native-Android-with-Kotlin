@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -18,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -30,18 +30,18 @@ import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.data.card.HeroInfo
-import com.example.beatfranticallyidle.data.card.HeroState
+import com.example.beatfranticallyidle.data.IdleStage
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.HeroViewModel
+import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 
 @Composable
 fun HeroesZone(
     modifier: Modifier = Modifier,
     background: Int,
     paddingValues: PaddingValues,
-    heroViewModel: HeroViewModel,
-    heroUiStage: HeroState,
-    typeHero: Int
+    typeHero: Int,
+    idleViewModel: IdleViewModel,
+    idleUiState: IdleStage,
 ) {
     val bottomPadding = paddingValues.calculateBottomPadding()
     Box(
@@ -64,37 +64,37 @@ fun HeroesZone(
             ) {
                 UnitCard(
                     modifier = modifier,
-                    heroViewModel = heroViewModel,
-                    heroUiStage = heroUiStage.allListHero[typeHero][0],
+                    currentHero = idleUiState.allListHero[typeHero][0],
+                    idleViewModel = idleViewModel,
                 )
                 UnitCard(
-                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    heroUiStage = heroUiStage.allListHero[typeHero][1],
+                    currentHero = idleUiState.allListHero[typeHero][1],
+                    idleViewModel = idleViewModel,
                 )
                 UnitCard(
-                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    heroUiStage = heroUiStage.allListHero[typeHero][2],
+                    currentHero = idleUiState.allListHero[typeHero][2],
+                    idleViewModel = idleViewModel,
                 )
             }
             Row(
                 modifier = Modifier.weight(1f)
             ) {
                 UnitCard(
-                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    heroUiStage = heroUiStage.allListHero[typeHero][3],
+                    currentHero = idleUiState.allListHero[typeHero][3],
+                    idleViewModel = idleViewModel,
                 )
                 UnitCard(
-                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    heroUiStage = heroUiStage.allListHero[typeHero][4],
+                    currentHero = idleUiState.allListHero[typeHero][4],
+                    idleViewModel = idleViewModel,
                 )
                 UnitCard(
-                    heroViewModel = heroViewModel,
                     modifier = modifier,
-                    heroUiStage = heroUiStage.allListHero[typeHero][5],
+                    currentHero = idleUiState.allListHero[typeHero][5],
+                    idleViewModel = idleViewModel,
                 )
             }
         }
@@ -103,18 +103,19 @@ fun HeroesZone(
 
 @Composable
 fun UnitCard(
-    heroViewModel: HeroViewModel,
     modifier: Modifier = Modifier,
-    heroUiStage: HeroInfo.Hero,
+    currentHero: HeroInfo.Hero,
+    idleViewModel: IdleViewModel,
 ) {
-    if (heroUiStage.discovered) {
-        HeroRevealed(
-            heroViewModel = heroViewModel,
-            heroUiStage = heroUiStage,
-            modifier = modifier,
+    when {
+        currentHero.discovered -> HeroRevealed(
+            idleViewModel = idleViewModel,
+            monsterUiState = currentHero,
+            modifier = modifier.fillMaxSize(),
         )
-    } else {
-        HeroHidden(
+
+        else -> HeroHidden(
+            currentHero = currentHero,
             modifier = modifier
         )
     }
@@ -122,54 +123,61 @@ fun UnitCard(
 
 @Composable
 private fun HeroRevealed(
-    heroViewModel: HeroViewModel,
     modifier: Modifier = Modifier,
-    heroUiStage: HeroInfo.Hero,
+    idleViewModel: IdleViewModel,
+    monsterUiState: HeroInfo.Hero,
 ) {
     Box(
         modifier = modifier
             .padding(8.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .clickable(
+                role = Role.Image,
+                onClick = { idleViewModel.showingCardFullScreen(monsterUiState) },
+            ),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(heroUiStage.image),
+            painter = painterResource(monsterUiState.imageHero),
             contentDescription = null,
             modifier = Modifier
-                .clickable(
-                    role = Role.Image,
-                    onClick = { heroViewModel.showingCardFullScreen(heroUiStage) },
-                )
                 .border(2.dp, Color.White)
         )
         Box(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(12.dp)
                 .fillMaxSize(),
         ) {
             Text(
-                text = heroUiStage.name,
+                text = monsterUiState.name,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 6.sp,
-                lineHeight = 12.sp,
+                fontSize = 8.sp,
+                lineHeight = 8.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp
+                    )
                     .clip(RoundedCornerShape(4.dp))
                     .align(alignment = Alignment.TopCenter)
-                    .size(width = 68.dp, height = 20.dp)
                     .background(Color(0x90000000))
                     .wrapContentSize()
             )
             Text(
-                text = heroUiStage.effect,
+                text = monsterUiState.effect,
                 color = Color.White,
-                fontSize = 10.sp,
-                lineHeight = 12.sp,
+                fontSize = 8.sp,
+                lineHeight = 8.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp
+                    )
+                    .clip(RoundedCornerShape(4.dp))
                     .align(alignment = Alignment.BottomCenter)
-                    .size(width = 70.dp, height = 40.dp)
                     .background(Color(0x90000000))
                     .wrapContentSize()
             )
@@ -178,9 +186,7 @@ private fun HeroRevealed(
 }
 
 @Composable
-private fun HeroHidden(
-    modifier: Modifier = Modifier,
-) {
+private fun HeroHidden(modifier: Modifier = Modifier, currentHero: HeroInfo.Hero) {
     Box(
         modifier = modifier
             .padding(8.dp)
@@ -188,10 +194,10 @@ private fun HeroHidden(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(R.drawable.card_null),
+            painter = painterResource(currentHero.imageNull),
             contentDescription = null,
             modifier = Modifier
-                .border(2.dp, Color.Black)
+                .border(2.dp, Color.White)
         )
     }
 }

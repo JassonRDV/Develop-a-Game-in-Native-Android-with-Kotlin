@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
@@ -25,106 +26,141 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.monster.MonsterStage
+import com.example.beatfranticallyidle.data.IdleStage
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.HeroViewModel
-import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
+import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 
 @Composable
 fun MonsterZone(
-    viewModel: MonsterViewModel,
-    uiState: MonsterStage,
+    idleViewModel: IdleViewModel,
+    monsterUiState: IdleStage,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    heroViewModel: HeroViewModel,
 ) {
     Box(
         modifier = modifier
     ) {
-        Background(modifier = Modifier.fillMaxSize())
+        Background(
+            monsterUiState = monsterUiState,
+            modifier = Modifier.fillMaxSize()
+        )
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = paddingValues.calculateTopPadding())
         ) {
-            Life(
-                uiState = uiState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(50.dp)
-            )
             Monster(
-                uiState = uiState,
-                viewModel = viewModel,
+                monsterUiState = monsterUiState,
+                idleViewModel = idleViewModel,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(60.dp)
             )
             Box(
-                modifier = Modifier.fillMaxSize()
+                contentAlignment = Alignment.BottomStart,
+                modifier = Modifier
             ) {
                 IconAndCount(
-                    uiState = uiState.rewardValue.toString(),
+                    monsterUiState = monsterUiState.totalReward.toString(),
                     horArrangement = Arrangement.Start,
                     verAlignment = Alignment.Bottom,
                     iconImage = R.drawable.icone_coin,
-                    fontSize = 20,
+                    fontSize = 24,
+                    iconSize = 24,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(12.dp),
                 )
-                Text(
-                    text = "COMPRA",
-                    fontSize = 20.sp,
-                    color = Color.Black,
+                Box(
                     modifier = Modifier
-                        .padding(12.dp)
                         .align(alignment = Alignment.BottomCenter)
-                        .background(Color.Green)
-                        .clickable { heroViewModel.compraCarta() }
-                )
+                        .padding(8.dp)
+                        .clickable { idleViewModel.buyCard() }
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "COMPRA",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.background(Color(0x50000000))
+                        )
+                        IconAndCount(
+                            monsterUiState = monsterUiState.purchaseCost.toString(),
+                            horArrangement = Arrangement.Start,
+                            verAlignment = Alignment.Top,
+                            iconImage = R.drawable.icone_coin,
+                            fontSize = 20,
+                            iconSize = 20,
+                            modifier = Modifier,
+                        )
+                    }
+                }
             }
             IconAndCount(
-                uiState = uiState.allMonsterDeadCount.toString(),
-                horArrangement = Arrangement.Start,
-                verAlignment = Alignment.Top,
+                monsterUiState = monsterUiState.numberAllDeath.toString(),
+                horArrangement = Arrangement.End,
+                verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_caveira,
-                fontSize = 20,
+                fontSize = 24,
+                iconSize = 24,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(12.dp),
             )
             PreviousAndNextMonster(
-                viewModel = viewModel,
+                idleViewModel = idleViewModel,
                 modifier = Modifier
                     .fillMaxSize()
             )
-            Text(
-                text = uiState.currentMonster.name,
-                fontSize = 20.sp,
-                color = Color.Black,
+            Box(
                 modifier = Modifier
-                    .align(alignment = Alignment.TopCenter)
-                    .padding(20.dp)
+                    .align(Alignment.TopCenter)
+                    .padding(12.dp)
+                    .background(
+                        color = Color(0x50000000),
+                        shape = RoundedCornerShape(12.dp)
+                    ).padding(4.dp)
+            ) {
+                Text(
+                    text = monsterUiState.currentMonster.name,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                )
+            }
+            LifeProgress(
+                monsterUiState = monsterUiState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(50.dp)
             )
         }
     }
 }
 
 @Composable
-private fun Background(modifier: Modifier = Modifier) {
+private fun Background(modifier: Modifier = Modifier, monsterUiState: IdleStage) {
     Image(
-        painter = painterResource(R.drawable.monsterarena),
+        painter = painterResource(monsterUiState.currentMonster.imageArena),
         contentScale = ContentScale.FillHeight,
         contentDescription = null,
         modifier = modifier
@@ -132,55 +168,83 @@ private fun Background(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Life(uiState: MonsterStage, modifier: Modifier = Modifier) {
+private fun LifeProgress(monsterUiState: IdleStage, modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
     ) {
+        val progress = monsterUiState.currentMonster.currentLife /
+                monsterUiState.currentMonster.maxLife
         LinearProgressIndicator(
-            progress = { uiState.lifeMonster / uiState.maxLifeMonster },
+            progress = { progress },
+            modifier = Modifier.size(width = 250.dp, height = 24.dp),
             color = Color.Red,
             trackColor = Color.Transparent,
-            modifier = Modifier
+        )
+        Text(
+            text = "${monsterUiState.currentMonster.currentLife.toInt()}/" +
+                    "${monsterUiState.currentMonster.maxLife.toInt()}",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
         )
     }
 }
 
 @Composable
 private fun Monster(
-    uiState: MonsterStage,
-    viewModel: MonsterViewModel,
+    monsterUiState: IdleStage,
+    idleViewModel: IdleViewModel,
     modifier: Modifier
 ) {
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
-        IconAndCount(
-            uiState = uiState.currentMonster.numberOfDeaths.toString(),
-            horArrangement = Arrangement.End,
-            verAlignment = Alignment.Bottom,
-            iconImage = R.drawable.icone_caveira,
-            fontSize = 20,
-        )
         AnimatedVisibility(
-            visible = !uiState.monsterDead,
+            visible = !monsterUiState.monsterDead,
             exit = scaleOut(),
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = painterResource(uiState.monsterImage),
+                painter = painterResource(monsterUiState.currentMonster.image),
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
-                colorFilter = if (uiState.tookDamage) ColorFilter.tint(Color.White)
+                colorFilter = if (monsterUiState.tookDamage) ColorFilter.tint(Color.White)
                 else null,
                 modifier = Modifier
                     .clickable(
                         role = Role.Image,
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
-                        onClick = { viewModel.monsterTookDamage() }
+                        onClick = { idleViewModel.monsterTookDamage() }
                     )
             )
+        }
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp)
+        ) {
+            IconAndCount(
+                monsterUiState = monsterUiState.currentMonster.rewardValue.toString(),
+                horArrangement = Arrangement.Center,
+                verAlignment = Alignment.Bottom,
+                iconImage = R.drawable.icone_coin,
+                fontSize = 20,
+                iconSize = 24,
+                modifier = Modifier
+            )
+            IconAndCount(
+                monsterUiState = monsterUiState.currentMonster.numberOfDeaths.toString(),
+                horArrangement = Arrangement.Center,
+                verAlignment = Alignment.CenterVertically,
+                iconImage = monsterUiState.currentMonster.icon,
+                fontSize = 20,
+                iconSize = 24,
+                modifier = Modifier
+            )
+
         }
     }
 }
@@ -191,7 +255,8 @@ private fun IconAndCount(
     verAlignment: Alignment.Vertical,
     @DrawableRes iconImage: Int,
     fontSize: Int,
-    uiState: String,
+    monsterUiState: String,
+    iconSize: Int,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -199,22 +264,35 @@ private fun IconAndCount(
         verticalAlignment = verAlignment,
         modifier = modifier
     ) {
-        Image(
-            painter = painterResource(iconImage),
-            contentDescription = null,
+        Row(
             modifier = Modifier
-        )
-        Text(
-            text = uiState,
-            fontSize = fontSize.sp,
-            color = Color.Red,
-            modifier = Modifier.padding(start = 4.dp)
-        )
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color(0x50000000))
+        ) {
+            Image(
+                painter = painterResource(iconImage),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(2.dp)
+                    .size(iconSize.dp)
+            )
+            Text(
+                text = monsterUiState,
+                fontSize = fontSize.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier
+                    .padding(2.dp)
+            )
+        }
     }
 }
 
 @Composable
-private fun PreviousAndNextMonster(viewModel: MonsterViewModel, modifier: Modifier = Modifier) {
+private fun PreviousAndNextMonster(
+    idleViewModel: IdleViewModel,
+    modifier: Modifier = Modifier,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -227,7 +305,9 @@ private fun PreviousAndNextMonster(viewModel: MonsterViewModel, modifier: Modifi
             modifier = Modifier
                 .size(80.dp)
                 .clickable(
-                    onClick = { viewModel.previousMonster() }
+                    onClick = {
+                        idleViewModel.previousMonster()
+                    }
                 )
         )
         Icon(
@@ -237,7 +317,9 @@ private fun PreviousAndNextMonster(viewModel: MonsterViewModel, modifier: Modifi
             modifier = Modifier
                 .size(80.dp)
                 .clickable(
-                    onClick = { viewModel.nextMonster() }
+                    onClick = {
+                        idleViewModel.nextMonster()
+                    }
                 )
         )
     }

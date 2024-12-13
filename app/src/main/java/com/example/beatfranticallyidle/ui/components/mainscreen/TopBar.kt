@@ -44,19 +44,8 @@ fun TopBar(
                 Text(
                     text = stringResource(R.string.app_name),
                     maxLines = 1,
+                    color = Color.White,
                     overflow = TextOverflow.Ellipsis,
-                )
-            },
-            navigationIcon = {
-                Icon(
-                    imageVector = Icons.Default.Psychology,
-                    contentDescription = null
-                )
-            },
-            actions = {
-                Image(
-                    painter = painterResource(R.drawable.icone_chave),
-                    contentDescription = null
                 )
             }
         )
