@@ -4,15 +4,31 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beatfranticallyidle.data.card.HeroInfo
 import com.example.beatfranticallyidle.data.IdleStage
+import com.example.beatfranticallyidle.data.monster.MonsterEntity
+import com.example.beatfranticallyidle.data.monster.MonsterRepository
+import com.example.beatfranticallyidle.data.monster.defaultMonsterEntity
 import com.example.beatfranticallyidle.data.monster.monsterList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class IdleViewModel : ViewModel() {
+@HiltViewModel
+class IdleViewModel @Inject constructor(
+    private val monsterRepository: MonsterRepository
+) : ViewModel() {
+
+    private fun insertMonster(monster: MonsterEntity) {
+        viewModelScope.launch {
+            monsterRepository.insert(monster)
+        }
+    }
+
     private val _uiState = MutableStateFlow(IdleStage())
     val uiState: StateFlow<IdleStage> = _uiState.asStateFlow()
 

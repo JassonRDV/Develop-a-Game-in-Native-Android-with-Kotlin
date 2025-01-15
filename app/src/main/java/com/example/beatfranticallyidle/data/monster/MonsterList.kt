@@ -6,19 +6,19 @@ val monsterList = mutableListOf(
     MonsterInfo.Monster(
         image = R.drawable.monster_galo,
         icon = R.drawable.monster_galo_icone,
-        name = "Galinha",
+        imageArena = R.drawable.background_campo_aberto,
         currentLife = 10f,
         maxLife = 10f,
         rewardType = RewardType.GOLD,
+        numberOfDeaths = 0,
         rewardValue = 5,
-        imageArena = R.drawable.background_campo_aberto,
-        numberOfDeaths = 0
+        name = "Galinha"
     ),
     MonsterInfo.Monster(
         image = R.drawable.monster_touro,
         icon = R.drawable.monster_touro_icone,
-        name = "Touro",
         currentLife = 30f,
+        name = "Touro",
         maxLife = 30f,
         rewardType = RewardType.GOLD,
         rewardValue = 10,
