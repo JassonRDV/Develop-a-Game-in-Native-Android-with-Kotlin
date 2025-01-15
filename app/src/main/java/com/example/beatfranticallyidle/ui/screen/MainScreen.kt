@@ -71,7 +71,7 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    background = R.drawable.black_hole,
+                    background = R.drawable.background_black_hole,
                     paddingValues = paddingValues,
                     typeHero = 2,
                     idleViewModel = idleViewModel,

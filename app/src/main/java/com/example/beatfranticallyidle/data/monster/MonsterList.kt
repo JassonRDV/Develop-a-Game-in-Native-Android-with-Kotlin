@@ -4,8 +4,8 @@ import com.example.beatfranticallyidle.R
 
 val monsterList = mutableListOf(
     MonsterInfo.Monster(
-        image = R.drawable.monstergalo,
-        icon = R.drawable.icone_mini_galo,
+        image = R.drawable.monster_galo,
+        icon = R.drawable.monster_galo_icone,
         name = "Galinha",
         currentLife = 10f,
         maxLife = 10f,
@@ -16,7 +16,7 @@ val monsterList = mutableListOf(
     ),
     MonsterInfo.Monster(
         image = R.drawable.monster_touro,
-        icon = R.drawable.icone_mini_touro,
+        icon = R.drawable.monster_touro_icone,
         name = "Touro",
         currentLife = 30f,
         maxLife = 30f,

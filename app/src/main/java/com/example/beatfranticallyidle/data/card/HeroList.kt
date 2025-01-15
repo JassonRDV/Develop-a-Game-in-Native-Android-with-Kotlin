@@ -17,8 +17,8 @@ private val listFireHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageHero = R.drawable.espiritofogo,
-        imageNull = R.drawable.card_fire_null
+        imageHero = R.drawable.card_fogo_espirito,
+        imageNull = R.drawable.card_null_fogo
     ),
     HeroInfo.Hero(
         name = "Doquinho de Fogo",
@@ -28,8 +28,8 @@ private val listFireHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_fire_null,
-        imageHero = R.drawable.card_doquinho_fogo
+        imageNull = R.drawable.card_null_fogo,
+        imageHero = R.drawable.card_fogo_dog
     ),
     HeroInfo.Hero(
         name = "Arqueira Incendiária",
@@ -39,8 +39,8 @@ private val listFireHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_fire_null,
-        imageHero = R.drawable.card_arqueira_incendiaria
+        imageNull = R.drawable.card_null_fogo,
+        imageHero = R.drawable.card_fogo_arqueira_incendiaria
     ),
     HeroInfo.Hero(
         name = "Mago de Fogo",
@@ -50,8 +50,8 @@ private val listFireHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_fire_null,
-        imageHero = R.drawable.magofogo
+        imageNull = R.drawable.card_null_fogo,
+        imageHero = R.drawable.card_fogo_mago
     ),
     HeroInfo.Hero(
         name = "Cavaleiro Solar",
@@ -61,8 +61,8 @@ private val listFireHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_fire_null,
-        imageHero = R.drawable.card_cavaleiro_solar
+        imageNull = R.drawable.card_null_fogo,
+        imageHero = R.drawable.card_fogo_cavaleiro_solar
     ),
     HeroInfo.Hero(
         name = "Montador de Dragões",
@@ -72,8 +72,8 @@ private val listFireHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_fire_null,
-        imageHero = R.drawable.card_montador_dragao
+        imageNull = R.drawable.card_null_fogo,
+        imageHero = R.drawable.card_fogo_montador_dragao
     ),
 )
 
@@ -86,7 +86,7 @@ private val listToxicHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_toxic_null,
+        imageNull = R.drawable.card_null_toxic,
         imageHero = R.drawable.card_null
     ),
     HeroInfo.Hero(
@@ -97,7 +97,7 @@ private val listToxicHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_toxic_null,
+        imageNull = R.drawable.card_null_toxic,
         imageHero = R.drawable.card_null
     ),
     HeroInfo.Hero(
@@ -108,7 +108,7 @@ private val listToxicHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_toxic_null,
+        imageNull = R.drawable.card_null_toxic,
         imageHero = R.drawable.card_null
     ),
     HeroInfo.Hero(
@@ -119,7 +119,7 @@ private val listToxicHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_toxic_null,
+        imageNull = R.drawable.card_null_toxic,
         imageHero = R.drawable.card_null
     ),
     HeroInfo.Hero(
@@ -130,7 +130,7 @@ private val listToxicHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_toxic_null,
+        imageNull = R.drawable.card_null_toxic,
         imageHero = R.drawable.card_null
     ),
     HeroInfo.Hero(
@@ -141,7 +141,7 @@ private val listToxicHero: List<HeroInfo.Hero> = mutableListOf(
         discovered = false,
         effectActivated = false,
         numberCardCount = 0,
-        imageNull = R.drawable.card_toxic_null,
+        imageNull = R.drawable.card_null_toxic,
         imageHero = R.drawable.card_null
     ),
 )
