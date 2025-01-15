@@ -1,10 +1,10 @@
-import com.google.devtools.ksp.gradle.model.Ksp
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -66,9 +66,11 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
 
     implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
 
@@ -80,4 +82,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+}
+
+kapt {
+    correctErrorTypes = true
 }
