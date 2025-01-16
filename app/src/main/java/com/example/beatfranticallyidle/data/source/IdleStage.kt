@@ -1,9 +1,9 @@
-package com.example.beatfranticallyidle.data
+package com.example.beatfranticallyidle.data.source
 
-import com.example.beatfranticallyidle.data.card.HeroInfo
-import com.example.beatfranticallyidle.data.card.listAllHeroes
-import com.example.beatfranticallyidle.data.monster.MonsterInfo
-import com.example.beatfranticallyidle.data.monster.monsterList
+import com.example.beatfranticallyidle.data.source.local.OldMonsterData.MonsterInfo
+import com.example.beatfranticallyidle.data.source.local.OldMonsterData.monsterList
+import com.example.beatfranticallyidle.data.source.local.card.HeroInfo
+import com.example.beatfranticallyidle.data.source.local.card.listAllHeroes
 
 data class IdleStage(
     // Informação do monstro atual

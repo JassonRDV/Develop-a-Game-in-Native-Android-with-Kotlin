@@ -12,7 +12,8 @@ import androidx.navigation.compose.composable
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.HeroCardRoute
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.IdleStage
+import com.example.beatfranticallyidle.data.source.IdleStage
+import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.ui.components.HeroesZone
 import com.example.beatfranticallyidle.ui.components.MonsterZone
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
@@ -21,17 +22,19 @@ import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 @Composable
 fun MainScreen(
     idleViewModel: IdleViewModel,
-    monsterUiState: IdleStage,
+    idleUiState: IdleStage,
     navController: NavHostController,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    monsterUiState: List<MonsterEntity>
 ) {
     Column(
         modifier = modifier
     ) {
         MonsterZone(
+            monstUiState = monsterUiState,
             idleViewModel = idleViewModel,
-            monsterUiState = monsterUiState,
+            idleUiState = idleUiState,
             paddingValues = paddingValues,
             modifier = Modifier
                 .fillMaxSize()
@@ -47,7 +50,7 @@ fun MainScreen(
                     typeHero = 0,
                     background = R.drawable.background_sol_pondo,
                     idleViewModel = idleViewModel,
-                    idleUiState = monsterUiState,
+                    idleUiState = idleUiState,
                     paddingValues = paddingValues,
                     modifier = Modifier
                         .fillMaxSize()
@@ -63,7 +66,7 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     typeHero = 1,
                     idleViewModel = idleViewModel,
-                    idleUiState = monsterUiState,
+                    idleUiState = idleUiState,
                 )
             }
             composable(route = HeroCardRoute.LightningHero.route) {
@@ -75,7 +78,7 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     typeHero = 2,
                     idleViewModel = idleViewModel,
-                    idleUiState = monsterUiState,
+                    idleUiState = idleUiState,
                 )
             }
         }

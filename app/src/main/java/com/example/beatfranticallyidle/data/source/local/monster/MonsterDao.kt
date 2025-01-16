@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.data.monster
+package com.example.beatfranticallyidle.data.source.local.monster
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -14,9 +14,11 @@ interface MonsterDao {
     @Update
     suspend fun update(item: MonsterEntity)
 
+    // Maybe I don't need this function anymore
     @Query("SELECT * FROM monsters WHERE id = :id")
     suspend fun getMonsterById(id: Int): MonsterEntity?
 
+    // Maybe I dont't need this function anymore
     @Query("SELECT * FROM monsters")
     fun getAllMonsters(): Flow<List<MonsterEntity>>
 }

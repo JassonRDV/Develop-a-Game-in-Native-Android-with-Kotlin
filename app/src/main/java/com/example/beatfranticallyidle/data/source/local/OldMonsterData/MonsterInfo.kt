@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.data.monster
+package com.example.beatfranticallyidle.data.source.local.OldMonsterData
 
 import androidx.annotation.DrawableRes
 

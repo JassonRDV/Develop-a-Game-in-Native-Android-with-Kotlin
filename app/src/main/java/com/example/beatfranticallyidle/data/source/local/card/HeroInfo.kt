@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.data.card
+package com.example.beatfranticallyidle.data.source.local.card
 
 import androidx.annotation.DrawableRes
 

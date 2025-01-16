@@ -38,22 +38,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.IdleStage
+import com.example.beatfranticallyidle.data.source.IdleStage
+import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 
 @Composable
 fun MonsterZone(
     idleViewModel: IdleViewModel,
-    monsterUiState: IdleStage,
+    idleUiState: IdleStage,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
+    monstUiState: List<MonsterEntity>,
 ) {
     Box(
         modifier = modifier
     ) {
         Background(
-            monsterUiState = monsterUiState,
+            monsterUiState = idleUiState,
             modifier = Modifier.fillMaxSize()
         )
         Box(
@@ -62,7 +64,8 @@ fun MonsterZone(
                 .padding(top = paddingValues.calculateTopPadding())
         ) {
             Monster(
-                monsterUiState = monsterUiState,
+                monsterUiState = monstUiState,
+                idleUiState = idleUiState,
                 idleViewModel = idleViewModel,
                 modifier = Modifier
                     .fillMaxSize()
@@ -73,7 +76,7 @@ fun MonsterZone(
                 modifier = Modifier
             ) {
                 IconAndCount(
-                    monsterUiState = monsterUiState.totalReward.toString(),
+                    monsterUiState = idleUiState.totalReward.toString(),
                     horArrangement = Arrangement.Start,
                     verAlignment = Alignment.Bottom,
                     iconImage = R.drawable.icone_coin,
@@ -100,7 +103,7 @@ fun MonsterZone(
                             modifier = Modifier.background(Color(0x50000000))
                         )
                         IconAndCount(
-                            monsterUiState = monsterUiState.purchaseCost.toString(),
+                            monsterUiState = idleUiState.purchaseCost.toString(),
                             horArrangement = Arrangement.Start,
                             verAlignment = Alignment.Top,
                             iconImage = R.drawable.icone_coin,
@@ -112,7 +115,7 @@ fun MonsterZone(
                 }
             }
             IconAndCount(
-                monsterUiState = monsterUiState.numberAllDeath.toString(),
+                monsterUiState = idleUiState.numberAllDeath.toString(),
                 horArrangement = Arrangement.End,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_caveira,
@@ -137,14 +140,14 @@ fun MonsterZone(
                     ).padding(4.dp)
             ) {
                 Text(
-                    text = monsterUiState.currentMonster.name,
+                    text = idleUiState.currentMonster.name,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                 )
             }
             LifeProgress(
-                monsterUiState = monsterUiState,
+                monsterUiState = idleUiState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(50.dp)
@@ -188,23 +191,30 @@ private fun LifeProgress(monsterUiState: IdleStage, modifier: Modifier = Modifie
 
 @Composable
 private fun Monster(
-    monsterUiState: IdleStage,
+    idleUiState: IdleStage,
     idleViewModel: IdleViewModel,
-    modifier: Modifier
+    modifier: Modifier,
+    monsterUiState: List<MonsterEntity>
 ) {
     Box(
         modifier = modifier,
     ) {
         AnimatedVisibility(
-            visible = !monsterUiState.monsterDead,
+            visible = !idleUiState.monsterDead,
             exit = scaleOut(),
             modifier = Modifier.fillMaxSize()
         ) {
+            val painter = if (monsterUiState.isNotEmpty() &&
+                monsterUiState.first().imageResId != 0) {
+                painterResource(monsterUiState.first().imageResId)
+            } else {
+                painterResource(R.drawable.monster_placeholder)
+            }
             Image(
-                painter = painterResource(monsterUiState.currentMonster.image),
+                painter = painter,
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
-                colorFilter = if (monsterUiState.tookDamage) ColorFilter.tint(Color.White)
+                colorFilter = if (idleUiState.tookDamage) ColorFilter.tint(Color.White)
                 else null,
                 modifier = Modifier
                     .clickable(
@@ -223,7 +233,7 @@ private fun Monster(
                 .padding(20.dp)
         ) {
             IconAndCount(
-                monsterUiState = monsterUiState.currentMonster.rewardValue.toString(),
+                monsterUiState = idleUiState.currentMonster.rewardValue.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_coin,
@@ -232,10 +242,10 @@ private fun Monster(
                 modifier = Modifier
             )
             IconAndCount(
-                monsterUiState = monsterUiState.currentMonster.numberOfDeaths.toString(),
+                monsterUiState = idleUiState.currentMonster.numberOfDeaths.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.CenterVertically,
-                iconImage = monsterUiState.currentMonster.icon,
+                iconImage = idleUiState.currentMonster.icon,
                 fontSize = 20,
                 iconSize = 24,
                 modifier = Modifier

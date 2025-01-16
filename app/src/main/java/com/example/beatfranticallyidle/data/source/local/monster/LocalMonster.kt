@@ -1,9 +1,10 @@
-package com.example.beatfranticallyidle.data.monster
+package com.example.beatfranticallyidle.data.source.local.monster
 
 import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.beatfranticallyidle.R
+import com.example.beatfranticallyidle.data.source.local.OldMonsterData.RewardType
 
 @Entity(tableName = "monsters")
 data class MonsterEntity(
@@ -17,7 +18,7 @@ data class MonsterEntity(
     val rewardType: RewardType,
     val baseRewardValue: Int,
     var currentRewardValue: Int,
-    var deathCount: Int = 0
+    var deathCount: Int,
 )
 
 val defaultMonsterEntity = mutableListOf(

@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.beatfranticallyidle.data.IdleStage
+import com.example.beatfranticallyidle.data.source.IdleStage
 import com.example.beatfranticallyidle.ui.components.mainscreen.BottomBar
 import com.example.beatfranticallyidle.ui.components.mainscreen.TopBar
 import com.example.beatfranticallyidle.ui.screen.MainScreen
@@ -41,12 +41,14 @@ sealed class HeroCardRoute(val route: String) {
     object PoisonHero : HeroCardRoute("PoisonHero")
 }
 
+
 @Composable
 fun AppIdle(
     idleViewModel: IdleViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val monsterUiState by idleViewModel.uiState.collectAsState()
+    val idleUiState by idleViewModel.uiState.collectAsState()
+    val monsterUiState by idleViewModel.monsterUiState.collectAsState()
     val navController = rememberNavController()
     Box(
         contentAlignment = Alignment.Center,
@@ -72,20 +74,21 @@ fun AppIdle(
             modifier = modifier
         ) { paddingValues ->
             MainScreen(
-                idleViewModel = idleViewModel,
                 monsterUiState = monsterUiState,
+                idleViewModel = idleViewModel,
+                idleUiState = idleUiState,
                 navController = navController,
                 paddingValues = paddingValues,
                 modifier = Modifier
             )
         }
         AnimatedVisibility(
-            visible = monsterUiState.showHeroDetails,
+            visible = idleUiState.showHeroDetails,
             modifier = Modifier.fillMaxSize()
         ) {
             HeroCardFullScreen(
                 idleViewModel = idleViewModel,
-                monsterUiState = monsterUiState,
+                monsterUiState = idleUiState,
                 modifier = Modifier.padding(48.dp)
             )
         }

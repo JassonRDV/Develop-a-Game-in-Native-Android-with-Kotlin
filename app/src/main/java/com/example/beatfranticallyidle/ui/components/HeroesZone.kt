@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
-import com.example.beatfranticallyidle.data.IdleStage
-import com.example.beatfranticallyidle.data.card.HeroInfo
+import com.example.beatfranticallyidle.data.source.IdleStage
+import com.example.beatfranticallyidle.data.source.local.card.HeroInfo
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 
