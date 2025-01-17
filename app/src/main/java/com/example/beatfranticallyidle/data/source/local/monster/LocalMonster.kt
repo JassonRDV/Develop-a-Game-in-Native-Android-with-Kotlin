@@ -9,19 +9,20 @@ import com.example.beatfranticallyidle.data.source.local.OldMonsterData.RewardTy
 @Entity(tableName = "monsters")
 data class MonsterEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @DrawableRes val imageResId: Int,
-    @DrawableRes val iconResId: Int,
-    @DrawableRes val arenaResId: Int,
-    val name: String,
-    val maxLife: Float,
-    var currentLife: Float,
-    val rewardType: RewardType,
-    val baseRewardValue: Int,
-    var currentRewardValue: Int,
-    var deathCount: Int,
+    @DrawableRes val imageResId: Int = 0,
+    @DrawableRes val iconResId: Int = 0,
+    @DrawableRes val arenaResId: Int = 0,
+    val name: String = "",
+    val maxLife: Float =0f,
+    var currentLife: Float =0f,
+    val rewardType: RewardType = RewardType.NULL,
+    val baseRewardValue: Int = 0,
+    var currentRewardValue: Int = 0,
+    var deathCount: Int = 0,
 )
 
-val defaultMonsterEntity = mutableListOf(
+
+val listMonsterEntity = mutableListOf(
     MonsterEntity(
         imageResId = R.drawable.monster_galo,
         iconResId = R.drawable.monster_galo_icone,

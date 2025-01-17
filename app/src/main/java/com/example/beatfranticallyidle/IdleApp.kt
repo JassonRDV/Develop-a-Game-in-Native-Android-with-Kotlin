@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.beatfranticallyidle.data.source.IdleStage
 import com.example.beatfranticallyidle.ui.components.mainscreen.BottomBar
 import com.example.beatfranticallyidle.ui.components.mainscreen.TopBar
 import com.example.beatfranticallyidle.ui.screen.MainScreen
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
+import com.example.beatfranticallyidle.viewmodel.IdleStage
 import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 
 sealed class HeroCardRoute(val route: String) {
@@ -40,7 +40,6 @@ sealed class HeroCardRoute(val route: String) {
     object LightningHero : HeroCardRoute("LightningHero")
     object PoisonHero : HeroCardRoute("PoisonHero")
 }
-
 
 @Composable
 fun AppIdle(
@@ -52,7 +51,7 @@ fun AppIdle(
     val navController = rememberNavController()
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = modifier
     ) {
         Scaffold(
             topBar = {
@@ -71,7 +70,7 @@ fun AppIdle(
             },
             containerColor = Color.Transparent,
             contentColor = Color.Transparent,
-            modifier = modifier
+            modifier = Modifier
         ) { paddingValues ->
             MainScreen(
                 monsterUiState = monsterUiState,
@@ -79,7 +78,7 @@ fun AppIdle(
                 idleUiState = idleUiState,
                 navController = navController,
                 paddingValues = paddingValues,
-                modifier = Modifier
+                modifier = Modifier,
             )
         }
         AnimatedVisibility(
@@ -161,6 +160,6 @@ fun HeroCardFullScreen(
 @Composable
 fun HeroesZonePreview() {
     BeatFranticallyIdleTheme {
-        AppIdle(modifier = Modifier.fillMaxSize())
+        AppIdle()
     }
 }

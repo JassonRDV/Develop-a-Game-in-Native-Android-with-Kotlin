@@ -12,11 +12,11 @@ import androidx.navigation.compose.composable
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.HeroCardRoute
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.source.IdleStage
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.ui.components.HeroesZone
 import com.example.beatfranticallyidle.ui.components.MonsterZone
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
+import com.example.beatfranticallyidle.viewmodel.IdleStage
 import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 
 @Composable
@@ -26,16 +26,16 @@ fun MainScreen(
     navController: NavHostController,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    monsterUiState: List<MonsterEntity>
+    monsterUiState: List<MonsterEntity>,
 ) {
     Column(
         modifier = modifier
     ) {
         MonsterZone(
-            monstUiState = monsterUiState,
             idleViewModel = idleViewModel,
             idleUiState = idleUiState,
             paddingValues = paddingValues,
+            monstUiState = monsterUiState,
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f)
@@ -59,26 +59,26 @@ fun MainScreen(
             }
             composable(route = HeroCardRoute.PoisonHero.route) {
                 HeroesZone(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
                     background = R.drawable.background_toxic,
                     paddingValues = paddingValues,
                     typeHero = 1,
                     idleViewModel = idleViewModel,
                     idleUiState = idleUiState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
                 )
             }
             composable(route = HeroCardRoute.LightningHero.route) {
                 HeroesZone(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
                     background = R.drawable.background_black_hole,
                     paddingValues = paddingValues,
                     typeHero = 2,
                     idleViewModel = idleViewModel,
                     idleUiState = idleUiState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
                 )
             }
         }
@@ -89,6 +89,6 @@ fun MainScreen(
 @Composable
 fun HeroesZonePreview() {
     BeatFranticallyIdleTheme {
-        AppIdle(modifier = Modifier.fillMaxSize())
+        AppIdle()
     }
 }

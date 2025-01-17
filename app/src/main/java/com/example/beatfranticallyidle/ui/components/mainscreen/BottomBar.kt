@@ -75,6 +75,6 @@ fun BottomBar(
 @Composable
 fun HeroesZonePreview() {
     BeatFranticallyIdleTheme {
-        AppIdle(modifier = Modifier.fillMaxSize())
+        AppIdle()
     }
 }

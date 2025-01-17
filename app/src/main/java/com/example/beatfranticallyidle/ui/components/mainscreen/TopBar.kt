@@ -48,6 +48,6 @@ fun TopBar(
 @Composable
 fun MonsterZonePreview() {
     BeatFranticallyIdleTheme {
-        AppIdle(modifier = Modifier.fillMaxSize())
+        AppIdle()
     }
 }

@@ -5,9 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface MonsterRepository {
 
-    suspend fun insert(item: MonsterEntity)
+    suspend fun insertALL(allMonsters: List<MonsterEntity>)
 
-    suspend fun update(item: MonsterEntity)
+    suspend fun deleteAll(allMonsters: List<MonsterEntity>)
+
+    suspend fun update(monster: MonsterEntity)
 
     suspend fun getMonsterById(id: Int): MonsterEntity?
 

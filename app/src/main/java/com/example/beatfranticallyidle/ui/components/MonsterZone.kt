@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.source.IdleStage
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
+import com.example.beatfranticallyidle.viewmodel.IdleStage
 import com.example.beatfranticallyidle.viewmodel.IdleViewModel
 
 @Composable
@@ -55,7 +55,7 @@ fun MonsterZone(
         modifier = modifier
     ) {
         Background(
-            monsterUiState = idleUiState,
+            idleUiState = idleUiState,
             modifier = Modifier.fillMaxSize()
         )
         Box(
@@ -137,7 +137,8 @@ fun MonsterZone(
                     .background(
                         color = Color(0x50000000),
                         shape = RoundedCornerShape(12.dp)
-                    ).padding(4.dp)
+                    )
+                    .padding(4.dp)
             ) {
                 Text(
                     text = idleUiState.currentMonster.name,
@@ -157,9 +158,12 @@ fun MonsterZone(
 }
 
 @Composable
-private fun Background(modifier: Modifier = Modifier, monsterUiState: IdleStage) {
+private fun Background(
+    modifier: Modifier = Modifier,
+    idleUiState: IdleStage,
+) {
     Image(
-        painter = painterResource(monsterUiState.currentMonster.imageArena),
+        painter = painterResource(idleUiState.currentMonster.arenaResId),
         contentScale = ContentScale.FillHeight,
         contentDescription = null,
         modifier = modifier
@@ -204,14 +208,8 @@ private fun Monster(
             exit = scaleOut(),
             modifier = Modifier.fillMaxSize()
         ) {
-            val painter = if (monsterUiState.isNotEmpty() &&
-                monsterUiState.first().imageResId != 0) {
-                painterResource(monsterUiState.first().imageResId)
-            } else {
-                painterResource(R.drawable.monster_placeholder)
-            }
             Image(
-                painter = painter,
+                painter = painterResource(idleUiState.currentMonster.imageResId),
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
                 colorFilter = if (idleUiState.tookDamage) ColorFilter.tint(Color.White)
@@ -233,7 +231,7 @@ private fun Monster(
                 .padding(20.dp)
         ) {
             IconAndCount(
-                monsterUiState = idleUiState.currentMonster.rewardValue.toString(),
+                monsterUiState = idleUiState.currentMonster.currentRewardValue.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_coin,
@@ -242,10 +240,10 @@ private fun Monster(
                 modifier = Modifier
             )
             IconAndCount(
-                monsterUiState = idleUiState.currentMonster.numberOfDeaths.toString(),
+                monsterUiState = idleUiState.currentMonster.deathCount.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.CenterVertically,
-                iconImage = idleUiState.currentMonster.icon,
+                iconImage = idleUiState.currentMonster.iconResId,
                 fontSize = 20,
                 iconSize = 24,
                 modifier = Modifier
@@ -335,6 +333,6 @@ private fun PreviousAndNextMonster(
 @Composable
 fun MonsterZonePreview() {
     BeatFranticallyIdleTheme {
-        AppIdle(modifier = Modifier.fillMaxSize())
+        AppIdle()
     }
 }

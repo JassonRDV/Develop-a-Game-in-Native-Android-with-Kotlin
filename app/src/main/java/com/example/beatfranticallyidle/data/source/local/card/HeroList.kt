@@ -152,6 +152,6 @@ val listAllHeroes: List<List<HeroInfo.Hero>> = listOf(listFireHero, listToxicHer
 @Composable
 fun HeroesZonePreview() {
     BeatFranticallyIdleTheme {
-        AppIdle(modifier = Modifier.fillMaxSize())
+        AppIdle()
     }
 }

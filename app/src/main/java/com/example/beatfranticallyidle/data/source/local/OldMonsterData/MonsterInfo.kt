@@ -2,7 +2,7 @@ package com.example.beatfranticallyidle.data.source.local.OldMonsterData
 
 import androidx.annotation.DrawableRes
 
-enum class RewardType { GOLD, SOUL }
+enum class RewardType { GOLD, SOUL, NULL }
 
 sealed class MonsterInfo {
     data class Monster(
