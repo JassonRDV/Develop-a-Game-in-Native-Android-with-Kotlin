@@ -8,13 +8,14 @@ import com.example.beatfranticallyidle.data.source.local.OldMonsterData.RewardTy
 import com.example.beatfranticallyidle.data.source.local.card.HeroInfo
 import com.example.beatfranticallyidle.data.source.local.card.listAllHeroes
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
+import com.example.beatfranticallyidle.data.source.local.monster.listMonsterEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,23 +30,25 @@ val defaultMonsterEntity = listOf(
         maxLife = 1f,
         currentLife = 1f,
         rewardType = RewardType.NULL,
-        baseRewardValue = 1,
-        currentRewardValue = 1,
+        rewardValue = 1,
         deathCount = 0
     )
 )
 
 data class IdleStage(
-    val loadingDatabase: Boolean = false,
+    // Banco de dados
+    val loadingDatabase: Boolean = true,
 
-    //monstro atual
+    // Informações do monstro atual
+    val currentMonsterIndex: Int = 0,
     val currentMonster: MonsterEntity = defaultMonsterEntity[0],
+    val lastMonsterIndex: Int = 0,
 
     // Recompensas e mortes
-    var totalReward: Float = 0f,
     val tookDamage: Boolean = false,
     val monsterDead: Boolean = false,
-    val numberAllDeath: Int = 0,
+    var allReward: Int = 0,
+    val allDeath: Int = 0,
 
     // Lista de heróis e herói atual
     val allListHero: List<List<HeroInfo.Hero>> = listAllHeroes,
@@ -66,7 +69,7 @@ class IdleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(IdleStage())
     val uiState: StateFlow<IdleStage> = _uiState.asStateFlow()
 
-    val monsterUiState: StateFlow<List<MonsterEntity>> =
+    private val monsterUiState: StateFlow<List<MonsterEntity>> =
         defaultMonsterRepository.getAllMonsters()
             .stateIn(
                 scope = viewModelScope,
@@ -76,25 +79,27 @@ class IdleViewModel @Inject constructor(
 
     init {
         updateCurrentMonster()
-//        insertAllMonsters(listMonsterEntity)
     }
 
     private fun updateCurrentMonster() {
         viewModelScope.launch {
-            monsterUiState.collect { list ->
-                if (list.isNotEmpty() && list.firstOrNull()?.name != "Monster") {
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            currentMonster = list.first()
-                        )
-                    }
+            monsterUiState.collectLatest { monster ->
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        currentMonster = monster.getOrNull(currentState.currentMonsterIndex)
+                            ?: currentState.currentMonster,
+                        lastMonsterIndex = monster.lastIndex,
+                        allReward = monster.sumOf { it.deathCount * it.rewardValue },
+                        allDeath = monster.sumOf { it.deathCount },
+                        loadingDatabase = false
+                    )
                 }
             }
         }
     }
 
     // I will only use it to start the database
-    private fun insertAllMonsters(allMonsters: List<MonsterEntity>) {
+    fun insertAllMonsters(allMonsters: List<MonsterEntity> = listMonsterEntity) {
         viewModelScope.launch {
             defaultMonsterRepository.insertALL(allMonsters)
         }
@@ -102,25 +107,30 @@ class IdleViewModel @Inject constructor(
 
     fun previousMonster() {
         viewModelScope.launch {
-            monsterUiState.collect { list ->
-                if (list.isNotEmpty() && list.firstOrNull()?.name != "Monster") {
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            currentMonster = list.first()
-                        )
-                    }
+            monsterUiState.collectLatest { monster ->
+                _uiState.update { currentState ->
+                    val monsterIndex = (currentState.currentMonsterIndex - 1)
+                        .coerceAtLeast(0)
+                    currentState.copy(
+                        currentMonsterIndex = monsterIndex,
+                        currentMonster = monster.getOrNull(monsterIndex)
+                            ?: currentState.currentMonster
+                    )
                 }
             }
         }
     }
 
     fun nextMonster() {
-        viewModelScope.launch {
-            monsterUiState.collect { list ->
-                if (list.isNotEmpty() && list.firstOrNull()?.name != "Monster") {
+        if (_uiState.value.currentMonsterIndex + 1 < monsterUiState.value.size) {
+            viewModelScope.launch {
+                monsterUiState.collectLatest { monster ->
                     _uiState.update { currentState ->
+                        val monsterIndex = (currentState.currentMonsterIndex + 1)
                         currentState.copy(
-                            currentMonster = list[1]
+                            currentMonsterIndex = monsterIndex,
+                            currentMonster = monster.getOrNull(monsterIndex)
+                                ?: currentState.currentMonster
                         )
                     }
                 }
@@ -129,45 +139,52 @@ class IdleViewModel @Inject constructor(
     }
 
     fun monsterTookDamage() {
-//        viewModelScope.launch {
-//            _uiState.update { currentState ->
-//                currentState.currentMonster.currentLife -= 1f
-//                currentState.copy(
-//                    tookDamage = true,
-//                )
-//            }
-//            delay(50)
-//            _uiState.update { currentState ->
-//                currentState.copy(
-//                    tookDamage = false
-//                )
-//            }
-//            monsterDied()
-//        }
+        if (_uiState.value.currentMonster.currentLife > 0) {
+            viewModelScope.launch {
+                _uiState.update { currentState ->
+                    currentState.currentMonster.currentLife -= 1f
+                    currentState.copy(
+                        tookDamage = true,
+                    )
+                }
+                delay(50)
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        tookDamage = false
+                    )
+                }
+            }
+            monsterDied()
+        }
     }
 
     private fun monsterDied() {
-//        if (_uiState.value.currentMonster.currentLife == 0f) {
-//            viewModelScope.launch {
-//                _uiState.update { currentState ->
-//                    currentState.currentMonster.deathCount += 1
-//                    currentState.copy(
-//                        monsterDead = true,
-//                        numberAllDeath = currentState.numberAllDeath + 1,
-//                        totalReward =
-//                        currentState.totalReward + currentState.currentMonster.currentRewardValue,
-//                    )
-//                }
-//                delay(500)
-//                _uiState.update { currentState ->
-//                    currentState.currentMonster.currentLife =
-//                        currentState.currentMonster.maxLife
-//                    currentState.copy(
-//                        monsterDead = false,
-//                    )
-//                }
-//            }
-//        }
+        if (_uiState.value.currentMonster.currentLife == 0f) {
+            viewModelScope.launch {
+                monsterUiState.collectLatest { monster ->
+                    _uiState.update { currentState ->
+                        currentState.currentMonster.deathCount += 1
+                        currentState.copy(
+                            monsterDead = true,
+                        )
+                    }
+                    delay(500)
+                    _uiState.update { currentState ->
+                        currentState.currentMonster.currentLife =
+                            currentState.currentMonster.maxLife
+                        currentState.copy(
+                            monsterDead = false,
+                            allReward = monster.sumOf { it.deathCount * it.rewardValue },
+                            allDeath = monster.sumOf { it.deathCount },
+                        )
+                    }
+                    defaultMonsterRepository.updateMonster(
+                        _uiState.value.currentMonster.name,
+                        _uiState.value.currentMonster.deathCount
+                    )
+                }
+            }
+        }
     }
 
     fun bottomBarTypeHero(currentList: Int) {
@@ -196,30 +213,30 @@ class IdleViewModel @Inject constructor(
     }
 
     fun buyCard() {
-        if (_uiState.value.allListHero[0] == _uiState.value.currentListHero
-            && _uiState.value.totalReward >= _uiState.value.purchaseCost
-        ) {
-            val randomIndex = (0..5).random()
-            _uiState.update { currentState ->
-                currentState.currentListHero[randomIndex].discovered = true
-                currentState.currentListHero[randomIndex].numberCardCount += 1
-                currentState.totalReward -= currentState.purchaseCost
-                currentState.purchaseCost *= currentState.increasedPurchaseCost
-                currentState.copy(
-                    currentHero = currentState.currentListHero[randomIndex]
-                )
-            }
-        }
-        if (
-            _uiState.value.currentListHero[0].discovered &&
-            !_uiState.value.currentListHero[0].effectActivated
-        ) {
-            _uiState.update { currentState ->
-                currentState.currentListHero[0].effectActivated = true
-                currentState.copy()
-            }
-            spiritEffect()
-        }
+//        if (_uiState.value.allListHero[0] == _uiState.value.currentListHero
+//            && _uiState.value.totalReward >= _uiState.value.purchaseCost
+//        ) {
+//            val randomIndex = (0..5).random()
+//            _uiState.update { currentState ->
+//                currentState.currentListHero[randomIndex].discovered = true
+//                currentState.currentListHero[randomIndex].numberCardCount += 1
+//                currentState.totalReward -= currentState.purchaseCost
+//                currentState.purchaseCost *= currentState.increasedPurchaseCost
+//                currentState.copy(
+//                    currentHero = currentState.currentListHero[randomIndex]
+//                )
+//            }
+//        }
+//        if (
+//            _uiState.value.currentListHero[0].discovered &&
+//            !_uiState.value.currentListHero[0].effectActivated
+//        ) {
+//            _uiState.update { currentState ->
+//                currentState.currentListHero[0].effectActivated = true
+//                currentState.copy()
+//            }
+//            spiritEffect()
+//        }
     }
 
     private fun spiritEffect() {

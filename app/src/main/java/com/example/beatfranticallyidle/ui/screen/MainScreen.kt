@@ -26,7 +26,6 @@ fun MainScreen(
     navController: NavHostController,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    monsterUiState: List<MonsterEntity>,
 ) {
     Column(
         modifier = modifier
@@ -35,7 +34,6 @@ fun MainScreen(
             idleViewModel = idleViewModel,
             idleUiState = idleUiState,
             paddingValues = paddingValues,
-            monstUiState = monsterUiState,
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f)

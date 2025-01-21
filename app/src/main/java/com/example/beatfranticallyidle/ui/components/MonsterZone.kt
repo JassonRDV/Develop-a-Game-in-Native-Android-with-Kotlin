@@ -2,6 +2,7 @@ package com.example.beatfranticallyidle.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -38,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 import com.example.beatfranticallyidle.viewmodel.IdleStage
 import com.example.beatfranticallyidle.viewmodel.IdleViewModel
@@ -49,7 +50,6 @@ fun MonsterZone(
     idleUiState: IdleStage,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    monstUiState: List<MonsterEntity>,
 ) {
     Box(
         modifier = modifier
@@ -64,7 +64,6 @@ fun MonsterZone(
                 .padding(top = paddingValues.calculateTopPadding())
         ) {
             Monster(
-                monsterUiState = monstUiState,
                 idleUiState = idleUiState,
                 idleViewModel = idleViewModel,
                 modifier = Modifier
@@ -76,7 +75,7 @@ fun MonsterZone(
                 modifier = Modifier
             ) {
                 IconAndCount(
-                    monsterUiState = idleUiState.totalReward.toString(),
+                    idleUiState = idleUiState.allReward.toString(),
                     horArrangement = Arrangement.Start,
                     verAlignment = Alignment.Bottom,
                     iconImage = R.drawable.icone_coin,
@@ -103,7 +102,7 @@ fun MonsterZone(
                             modifier = Modifier.background(Color(0x50000000))
                         )
                         IconAndCount(
-                            monsterUiState = idleUiState.purchaseCost.toString(),
+                            idleUiState = idleUiState.purchaseCost.toString(),
                             horArrangement = Arrangement.Start,
                             verAlignment = Alignment.Top,
                             iconImage = R.drawable.icone_coin,
@@ -115,7 +114,7 @@ fun MonsterZone(
                 }
             }
             IconAndCount(
-                monsterUiState = idleUiState.numberAllDeath.toString(),
+                idleUiState = idleUiState.allDeath.toString(),
                 horArrangement = Arrangement.End,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_caveira,
@@ -127,6 +126,7 @@ fun MonsterZone(
             )
             PreviousAndNextMonster(
                 idleViewModel = idleViewModel,
+                idleUiState = idleUiState,
                 modifier = Modifier
                     .fillMaxSize()
             )
@@ -198,7 +198,6 @@ private fun Monster(
     idleUiState: IdleStage,
     idleViewModel: IdleViewModel,
     modifier: Modifier,
-    monsterUiState: List<MonsterEntity>
 ) {
     Box(
         modifier = modifier,
@@ -231,7 +230,7 @@ private fun Monster(
                 .padding(20.dp)
         ) {
             IconAndCount(
-                monsterUiState = idleUiState.currentMonster.currentRewardValue.toString(),
+                idleUiState = idleUiState.currentMonster.rewardValue.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_coin,
@@ -240,7 +239,7 @@ private fun Monster(
                 modifier = Modifier
             )
             IconAndCount(
-                monsterUiState = idleUiState.currentMonster.deathCount.toString(),
+                idleUiState = idleUiState.currentMonster.deathCount.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.CenterVertically,
                 iconImage = idleUiState.currentMonster.iconResId,
@@ -259,7 +258,7 @@ private fun IconAndCount(
     verAlignment: Alignment.Vertical,
     @DrawableRes iconImage: Int,
     fontSize: Int,
-    monsterUiState: String,
+    idleUiState: String,
     iconSize: Int,
     modifier: Modifier = Modifier
 ) {
@@ -281,7 +280,7 @@ private fun IconAndCount(
                     .size(iconSize.dp)
             )
             Text(
-                text = monsterUiState,
+                text = idleUiState,
                 fontSize = fontSize.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -296,36 +295,61 @@ private fun IconAndCount(
 private fun PreviousAndNextMonster(
     idleViewModel: IdleViewModel,
     modifier: Modifier = Modifier,
+    idleUiState: IdleStage,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+    Box(
         modifier = modifier
     ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowLeft,
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .size(80.dp)
-                .clickable(
-                    onClick = {
-                        idleViewModel.previousMonster()
-                    }
-                )
-        )
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .size(80.dp)
-                .clickable(
-                    onClick = {
-                        idleViewModel.nextMonster()
-                    }
-                )
-        )
+        Button(
+            onClick = {
+                idleViewModel.insertAllMonsters()
+            },
+            modifier = Modifier.align(alignment = Alignment.TopEnd)
+        ) {
+            Text(text = "Criar")
+        }
+        AnimatedVisibility(
+            visible = (idleUiState.currentMonsterIndex != 0),
+            enter = scaleIn(),
+            exit = scaleOut(),
+            modifier = Modifier.align(alignment = Alignment.CenterStart)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowLeft,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clickable(
+                        onClick = {
+                            idleViewModel.previousMonster()
+                        }
+                    )
+            )
+        }
+        AnimatedVisibility(
+            visible = (
+                    idleUiState.currentMonster.deathCount > 0
+                            && idleUiState.lastMonsterIndex
+                            != idleUiState.currentMonsterIndex
+                    ),
+            enter = scaleIn(),
+            exit = scaleOut(),
+            modifier = Modifier.align(alignment = Alignment.CenterEnd)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clickable(
+                        onClick = {
+                            idleViewModel.nextMonster()
+                        }
+                    )
+            )
+        }
     }
 }
 

@@ -13,38 +13,34 @@ data class MonsterEntity(
     @DrawableRes val iconResId: Int = 0,
     @DrawableRes val arenaResId: Int = 0,
     val name: String = "",
-    val maxLife: Float =0f,
-    var currentLife: Float =0f,
+    val maxLife: Float = 1f,
+    var currentLife: Float = 1f,
     val rewardType: RewardType = RewardType.NULL,
-    val baseRewardValue: Int = 0,
-    var currentRewardValue: Int = 0,
+    val rewardValue: Int = 1,
     var deathCount: Int = 0,
 )
-
 
 val listMonsterEntity = mutableListOf(
     MonsterEntity(
         imageResId = R.drawable.monster_galo,
         iconResId = R.drawable.monster_galo_icone,
         arenaResId = R.drawable.background_campo_aberto,
-        currentLife = 10f,
-        maxLife = 10f,
+        name = "Galinha",
+        maxLife = 1f,
         rewardType = RewardType.GOLD,
         deathCount = 0,
-        baseRewardValue = 5,
-        name = "Galinha",
-        currentRewardValue = 5
+        currentLife = 1f,
+        rewardValue = 40
     ),
     MonsterEntity(
         imageResId = R.drawable.monster_touro,
         iconResId = R.drawable.monster_touro_icone,
-        currentLife = 30f,
-        name = "Touro",
-        maxLife = 30f,
-        rewardType = RewardType.GOLD,
-        baseRewardValue = 10,
         arenaResId = R.drawable.background_arena,
-        deathCount = 0,
-        currentRewardValue = 5
+        name = "Touro",
+        currentLife = 2f,
+        maxLife = 2f,
+        rewardType = RewardType.GOLD,
+        rewardValue = 80,
+        deathCount = 0
     )
 )

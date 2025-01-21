@@ -11,18 +11,15 @@ class DefaultMonsterRepository @Inject constructor(
     private val monsterDao: MonsterDao
 ) : MonsterRepository {
 
-    override suspend fun insertALL(allMonsters: List<MonsterEntity>) =
+    override suspend fun insertALL(allMonsters: List<MonsterEntity>) {
         monsterDao.insertAll(allMonsters)
+    }
 
-    override suspend fun update(monster: MonsterEntity) =
-        monsterDao.update(monster)
+    override suspend fun updateMonster(nameMonster: String, deathCount: Int) {
+        monsterDao.updateMonster(nameMonster, deathCount)
+    }
 
-    override suspend fun deleteAll(allMonsters: List<MonsterEntity>) =
-        monsterDao.deleteAll(allMonsters)
-
-    override suspend fun getMonsterById(id: Int): MonsterEntity? =
-        monsterDao.getMonsterById(id)
-
-    override fun getAllMonsters(): Flow<List<MonsterEntity>> =
-        monsterDao.getAllMonsters()
+    override fun getAllMonsters(): Flow<List<MonsterEntity>> {
+        return monsterDao.getAllMonsters()
+    }
 }

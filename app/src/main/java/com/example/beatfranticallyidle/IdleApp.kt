@@ -47,7 +47,6 @@ fun AppIdle(
     modifier: Modifier = Modifier
 ) {
     val idleUiState by idleViewModel.uiState.collectAsState()
-    val monsterUiState by idleViewModel.monsterUiState.collectAsState()
     val navController = rememberNavController()
     Box(
         contentAlignment = Alignment.Center,
@@ -73,7 +72,6 @@ fun AppIdle(
             modifier = Modifier
         ) { paddingValues ->
             MainScreen(
-                monsterUiState = monsterUiState,
                 idleViewModel = idleViewModel,
                 idleUiState = idleUiState,
                 navController = navController,
