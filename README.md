@@ -1,43 +1,47 @@
-# Develop a Game in Native Android with Kotlin
+---
 
-🚀 **Desenvolvendo um Jogo Nativo no Android com Kotlin**  
+# Develop a Game in Native Android with Kotlin  
 
-Este projeto é um jogo idle de DPS chamado **Beat Frantically**, desenvolvido em Android nativo usando Kotlin.  
-O objetivo é derrotar monstros, coletar recompensas e evoluir no jogo. O código é totalmente **open-source** e criado para fins educacionais.  
+🚀 **Developing a Native Android Game with Kotlin**  
+
+This project is an idle DPS game called **Beat Frantically**, built using native Android with Kotlin.  
+The goal is to defeat monsters, collect rewards, and progress through the game. The code is entirely **open-source** and created for educational purposes.  
 
 ---
 
-## 🎮 **Recursos do Jogo**
+## 🎮 **Game Features**  
 
-- **Monstros Dinâmicos**: Cada monstro possui níveis de dificuldade e recompensas únicas *"em desenvolvimento"*.  
-- **Evolução de Gameplay**: Use recompensas para subir de nível.  
-- **Sistema de Mortes**: Rastreamento persistente do número de mortes de cada monstro.  
-- **2D Vertical**: Experiência otimizada para dispositivos móveis.  
-
----
-
-## 🛠 **Tecnologias Usadas**
-
-- **Linguagem**: Kotlin  
-- **Frameworks**: Android Jetpack (Room, ViewModel, Flow, Navigation).  
-- **Banco de Dados**: Room para persistência local.  
-- **Injeção de Dependência**: Hilt.  
-- **Arquitetura**: MVVM.  
-- **Testes**: Ainda não iniciados.  
+- **Dynamic Monsters**: Each monster has unique difficulty levels and rewards (*under development*).  
+- **Progressive Gameplay**: Use rewards to level up.  
+- **Death Tracking**: Persistent tracking of the number of monster deaths.  
+- **Vertical 2D**: Experience optimized for mobile devices.  
 
 ---
 
-## 🧑‍💻 **Contribuições**
+## 🛠 **Technologies Used**  
 
-- No momento, o projeto não está pronto para contribuições.  
-- Estou aprendendo enquanto programo e, por enquanto, o código está bagunçado.  
-- Estou sempre melhorando e resolvendo problemas, mas, se você gosta de desafios, entre em contato. 😊  
+- **Language**: Kotlin  
+- **Frameworks**: Android Jetpack (Room, ViewModel, Flow, Navigation)  
+- **Database**: Room for local persistence  
+- **Dependency Injection**: Hilt  
+- **Architecture**: MVVM  
+- **Testing**: Not yet implemented  
 
 ---
 
-## 🪁 **Planos**
+## 🧑‍💻 **Contributions**  
 
-- Planejo utilizar o que existe de mais moderno no desenvolvimento Android com Kotlin.  
-- Adicionar persistência de dados e salvar na Firebase.  
-- Atualmente, estou usando imagens geradas por IA que imitam pixel art.  
-- No entanto, no projeto final, vou criar as artes 2D, já que **também sou artista 2D e 3D**.
+- At the moment, the project is not ready for contributions.  
+- I am learning as I code, so the current codebase is quite messy.  
+- I am constantly improving and solving issues, but if you enjoy challenges, feel free to get in touch. 😊  
+
+---
+
+## 🪁 **Plans**  
+
+- I plan to incorporate the latest advancements in Android development with Kotlin.  
+- Add data persistence and save player gameplay on Firebase.  
+- Currently, the game uses AI-generated images that mimic pixel art.  
+- However, for the final project, I will create the 2D artwork myself, as I am also a **2D and 3D artist**.  
+
+---
