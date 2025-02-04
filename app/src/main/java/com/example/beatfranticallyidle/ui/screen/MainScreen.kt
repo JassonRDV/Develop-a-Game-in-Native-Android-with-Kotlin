@@ -12,7 +12,6 @@ import androidx.navigation.compose.composable
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.HeroCardRoute
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.ui.components.HeroesZone
 import com.example.beatfranticallyidle.ui.components.MonsterZone
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme

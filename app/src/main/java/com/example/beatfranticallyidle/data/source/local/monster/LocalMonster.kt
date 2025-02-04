@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.data.source.local.OldMonsterData.RewardType
+import com.example.beatfranticallyidle.viewmodel.RewardType
 
 @Entity(tableName = "monsters")
 data class MonsterEntity(

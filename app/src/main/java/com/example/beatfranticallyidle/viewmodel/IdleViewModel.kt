@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.data.source.DefaultMonsterRepository
-import com.example.beatfranticallyidle.data.source.local.OldMonsterData.RewardType
 import com.example.beatfranticallyidle.data.source.local.card.HeroInfo
 import com.example.beatfranticallyidle.data.source.local.card.listAllHeroes
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
@@ -20,6 +19,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+enum class RewardType { GOLD, SOUL, NULL }
 
 val defaultMonsterEntity = listOf(
     MonsterEntity(
@@ -248,3 +249,4 @@ class IdleViewModel @Inject constructor(
         }
     }
 }
+
