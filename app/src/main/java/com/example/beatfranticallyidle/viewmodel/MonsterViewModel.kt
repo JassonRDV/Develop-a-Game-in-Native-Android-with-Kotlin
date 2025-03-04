@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.data.source.DefaultMonsterRepository
-import com.example.beatfranticallyidle.data.source.local.card.HeroInfo
-import com.example.beatfranticallyidle.data.source.local.card.listAllHeroes
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.data.source.local.monster.listMonsterEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +34,7 @@ val defaultMonsterEntity = listOf(
     )
 )
 
-data class IdleStage(
+data class MonsterUiStage(
     // Banco de dados
     val loadingDatabase: Boolean = true,
 
@@ -50,25 +48,15 @@ data class IdleStage(
     val monsterDead: Boolean = false,
     var allReward: Int = 0,
     val allDeath: Int = 0,
-
-    // Lista de heróis e herói atual
-    val allListHero: List<List<HeroInfo.Hero>> = listAllHeroes,
-    val currentListHero: List<HeroInfo.Hero> = allListHero[0],
-    val currentHero: HeroInfo.Hero = currentListHero[0],
-
-    // Estado do herói atual
-    val showHeroDetails: Boolean = false,
-    var purchaseCost: Float = 10f,
-    val increasedPurchaseCost: Float = 1.25f
 )
 
 @HiltViewModel
-class IdleViewModel @Inject constructor(
+class MonsterViewModel @Inject constructor(
     private val defaultMonsterRepository: DefaultMonsterRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(IdleStage())
-    val uiState: StateFlow<IdleStage> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(MonsterUiStage())
+    val uiState: StateFlow<MonsterUiStage> = _uiState.asStateFlow()
 
     private val monsterUiState: StateFlow<List<MonsterEntity>> =
         defaultMonsterRepository.getAllMonsters()
@@ -184,67 +172,6 @@ class IdleViewModel @Inject constructor(
                         _uiState.value.currentMonster.deathCount
                     )
                 }
-            }
-        }
-    }
-
-    fun bottomBarTypeHero(currentList: Int) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                currentListHero = currentState.allListHero[currentList]
-            )
-        }
-    }
-
-    fun showingCardFullScreen(selectedHero: HeroInfo.Hero) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                showHeroDetails = true,
-                currentHero = selectedHero
-            )
-        }
-    }
-
-    fun hideCardFullScreen() {
-        _uiState.update { currentState ->
-            currentState.copy(
-                showHeroDetails = false,
-            )
-        }
-    }
-
-    fun buyCard() {
-//        if (_uiState.value.allListHero[0] == _uiState.value.currentListHero
-//            && _uiState.value.totalReward >= _uiState.value.purchaseCost
-//        ) {
-//            val randomIndex = (0..5).random()
-//            _uiState.update { currentState ->
-//                currentState.currentListHero[randomIndex].discovered = true
-//                currentState.currentListHero[randomIndex].numberCardCount += 1
-//                currentState.totalReward -= currentState.purchaseCost
-//                currentState.purchaseCost *= currentState.increasedPurchaseCost
-//                currentState.copy(
-//                    currentHero = currentState.currentListHero[randomIndex]
-//                )
-//            }
-//        }
-//        if (
-//            _uiState.value.currentListHero[0].discovered &&
-//            !_uiState.value.currentListHero[0].effectActivated
-//        ) {
-//            _uiState.update { currentState ->
-//                currentState.currentListHero[0].effectActivated = true
-//                currentState.copy()
-//            }
-//            spiritEffect()
-//        }
-    }
-
-    private fun spiritEffect() {
-        viewModelScope.launch {
-            while (uiState.value.allListHero[0][0].discovered) {
-                monsterTookDamage()
-                delay(1000)
             }
         }
     }

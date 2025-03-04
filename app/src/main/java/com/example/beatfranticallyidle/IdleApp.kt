@@ -32,8 +32,9 @@ import com.example.beatfranticallyidle.ui.components.mainscreen.BottomBar
 import com.example.beatfranticallyidle.ui.components.mainscreen.TopBar
 import com.example.beatfranticallyidle.ui.screen.MainScreen
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.IdleStage
-import com.example.beatfranticallyidle.viewmodel.IdleViewModel
+import com.example.beatfranticallyidle.viewmodel.CardUiState
+import com.example.beatfranticallyidle.viewmodel.CardViewModel
+import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 
 sealed class HeroCardRoute(val route: String) {
     object FireHero : HeroCardRoute("FireHero")
@@ -43,10 +44,12 @@ sealed class HeroCardRoute(val route: String) {
 
 @Composable
 fun AppIdle(
-    idleViewModel: IdleViewModel = viewModel(),
+    monsterViewModel: MonsterViewModel = viewModel(),
+    cardViewModel: CardViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val idleUiState by idleViewModel.uiState.collectAsState()
+    val idleUiState by monsterViewModel.uiState.collectAsState()
+    val cardUiState by cardViewModel.uiState.collectAsState()
     val navController = rememberNavController()
     Box(
         contentAlignment = Alignment.Center,
@@ -61,9 +64,9 @@ fun AppIdle(
             },
             bottomBar = {
                 BottomBar(
+                    cardViewModel = cardViewModel,
                     backgroundColor = Color(0x80000000),
                     navController = navController,
-                    idleViewModel = idleViewModel,
                     modifier = Modifier
                 )
             },
@@ -72,7 +75,9 @@ fun AppIdle(
             modifier = Modifier
         ) { paddingValues ->
             MainScreen(
-                idleViewModel = idleViewModel,
+                cardViewModel = cardViewModel,
+                cardUiState = cardUiState,
+                monsterViewModel = monsterViewModel,
                 idleUiState = idleUiState,
                 navController = navController,
                 paddingValues = paddingValues,
@@ -80,12 +85,12 @@ fun AppIdle(
             )
         }
         AnimatedVisibility(
-            visible = idleUiState.showHeroDetails,
+            visible = cardUiState.showHeroDetails,
             modifier = Modifier.fillMaxSize()
         ) {
             HeroCardFullScreen(
-                idleViewModel = idleViewModel,
-                monsterUiState = idleUiState,
+                cardUiState = cardUiState,
+                cardViewModel = cardViewModel,
                 modifier = Modifier.padding(48.dp)
             )
         }
@@ -95,15 +100,15 @@ fun AppIdle(
 @Composable
 fun HeroCardFullScreen(
     modifier: Modifier,
-    idleViewModel: IdleViewModel,
-    monsterUiState: IdleStage
+    cardUiState: CardUiState,
+    cardViewModel: CardViewModel
 ) {
     Box(
         modifier = modifier
             .clickable(
                 role = Role.Image,
                 onClick = {
-                    idleViewModel.hideCardFullScreen()
+                    cardViewModel.hideCardFullScreen()
                 },
             )
             .padding(8.dp)
@@ -111,7 +116,7 @@ fun HeroCardFullScreen(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(monsterUiState.currentHero.imageHero),
+            painter = painterResource(cardUiState.currentHero.imageHero),
             contentDescription = null,
             modifier = Modifier
                 .border(2.dp, Color.White)
@@ -127,7 +132,7 @@ fun HeroCardFullScreen(
                 .fillMaxSize(),
         ) {
             Text(
-                text = monsterUiState.currentHero.name,
+                text = cardUiState.currentHero.name,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
@@ -140,7 +145,7 @@ fun HeroCardFullScreen(
                     .wrapContentSize()
             )
             Text(
-                text = monsterUiState.currentHero.effect,
+                text = cardUiState.currentHero.effect,
                 color = Color.White,
                 fontSize = 28.sp,
                 lineHeight = 28.sp,

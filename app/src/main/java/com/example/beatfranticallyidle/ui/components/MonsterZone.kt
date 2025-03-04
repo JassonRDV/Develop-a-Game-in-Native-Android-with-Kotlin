@@ -41,15 +41,19 @@ import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.IdleStage
-import com.example.beatfranticallyidle.viewmodel.IdleViewModel
+import com.example.beatfranticallyidle.viewmodel.CardUiState
+import com.example.beatfranticallyidle.viewmodel.CardViewModel
+import com.example.beatfranticallyidle.viewmodel.MonsterUiStage
+import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 
 @Composable
 fun MonsterZone(
-    idleViewModel: IdleViewModel,
-    idleUiState: IdleStage,
+    monsterViewModel: MonsterViewModel,
+    idleUiState: MonsterUiStage,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
+    cardViewModel: CardViewModel,
+    cardUiState: CardUiState,
 ) {
     Box(
         modifier = modifier
@@ -65,7 +69,7 @@ fun MonsterZone(
         ) {
             Monster(
                 idleUiState = idleUiState,
-                idleViewModel = idleViewModel,
+                monsterViewModel = monsterViewModel,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(60.dp)
@@ -89,7 +93,7 @@ fun MonsterZone(
                     modifier = Modifier
                         .align(alignment = Alignment.BottomCenter)
                         .padding(8.dp)
-                        .clickable { idleViewModel.buyCard() }
+                        .clickable { cardViewModel.buyCard() }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -102,7 +106,7 @@ fun MonsterZone(
                             modifier = Modifier.background(Color(0x50000000))
                         )
                         IconAndCount(
-                            idleUiState = idleUiState.purchaseCost.toString(),
+                            idleUiState = cardUiState.purchaseCost.toString(),
                             horArrangement = Arrangement.Start,
                             verAlignment = Alignment.Top,
                             iconImage = R.drawable.icone_coin,
@@ -125,7 +129,7 @@ fun MonsterZone(
                     .padding(12.dp),
             )
             PreviousAndNextMonster(
-                idleViewModel = idleViewModel,
+                monsterViewModel = monsterViewModel,
                 idleUiState = idleUiState,
                 modifier = Modifier
                     .fillMaxSize()
@@ -160,7 +164,7 @@ fun MonsterZone(
 @Composable
 private fun Background(
     modifier: Modifier = Modifier,
-    idleUiState: IdleStage,
+    idleUiState: MonsterUiStage,
 ) {
     Image(
         painter = painterResource(idleUiState.currentMonster.arenaResId),
@@ -171,7 +175,7 @@ private fun Background(
 }
 
 @Composable
-private fun LifeProgress(monsterUiState: IdleStage, modifier: Modifier = Modifier) {
+private fun LifeProgress(monsterUiState: MonsterUiStage, modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
@@ -195,8 +199,8 @@ private fun LifeProgress(monsterUiState: IdleStage, modifier: Modifier = Modifie
 
 @Composable
 private fun Monster(
-    idleUiState: IdleStage,
-    idleViewModel: IdleViewModel,
+    idleUiState: MonsterUiStage,
+    monsterViewModel: MonsterViewModel,
     modifier: Modifier,
 ) {
     Box(
@@ -218,7 +222,7 @@ private fun Monster(
                         role = Role.Image,
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
-                        onClick = { idleViewModel.monsterTookDamage() }
+                        onClick = { monsterViewModel.monsterTookDamage() }
                     )
             )
         }
@@ -293,16 +297,16 @@ private fun IconAndCount(
 
 @Composable
 private fun PreviousAndNextMonster(
-    idleViewModel: IdleViewModel,
+    monsterViewModel: MonsterViewModel,
     modifier: Modifier = Modifier,
-    idleUiState: IdleStage,
+    idleUiState: MonsterUiStage,
 ) {
     Box(
         modifier = modifier
     ) {
         Button(
             onClick = {
-                idleViewModel.insertAllMonsters()
+                monsterViewModel.insertAllMonsters()
             },
             modifier = Modifier.align(alignment = Alignment.TopEnd)
         ) {
@@ -322,7 +326,7 @@ private fun PreviousAndNextMonster(
                     .size(80.dp)
                     .clickable(
                         onClick = {
-                            idleViewModel.previousMonster()
+                            monsterViewModel.previousMonster()
                         }
                     )
             )
@@ -345,7 +349,7 @@ private fun PreviousAndNextMonster(
                     .size(80.dp)
                     .clickable(
                         onClick = {
-                            idleViewModel.nextMonster()
+                            monsterViewModel.nextMonster()
                         }
                     )
             )

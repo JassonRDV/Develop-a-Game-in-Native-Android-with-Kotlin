@@ -2,9 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    id("com.google.devtools.ksp")
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.devtools.kps)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
@@ -70,7 +69,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
 
@@ -84,8 +83,4 @@ dependencies {
 
     implementation(libs.androidx.multidex)
     implementation(libs.timber)
-}
-
-kapt {
-    correctErrorTypes = true
 }

@@ -20,14 +20,14 @@ import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.HeroCardRoute
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.IdleViewModel
+import com.example.beatfranticallyidle.viewmodel.CardViewModel
 
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     backgroundColor: Color,
-    idleViewModel: IdleViewModel
+    cardViewModel: CardViewModel,
 ) {
     BottomAppBar(
         modifier = modifier,
@@ -49,13 +49,14 @@ fun BottomBar(
                         ) {
                             navController.navigate(HeroCardRoute.FireHero.route)
                         }
-                        idleViewModel.bottomBarTypeHero(0)
+                        cardViewModel.bottomBarTypeHero(0)
                     }
             )
             Image(
                 painter = painterResource(R.drawable.icone_poison),
                 contentDescription = null,
-                modifier = Modifier.clip(RoundedCornerShape(20.dp))
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
                     .weight(1f)
                     .fillMaxSize(0.7f)
                     .clickable {
@@ -64,7 +65,7 @@ fun BottomBar(
                         ) {
                             navController.navigate(HeroCardRoute.PoisonHero.route)
                         }
-                        idleViewModel.bottomBarTypeHero(1)
+                        cardViewModel.bottomBarTypeHero(1)
                     }
             )
         }

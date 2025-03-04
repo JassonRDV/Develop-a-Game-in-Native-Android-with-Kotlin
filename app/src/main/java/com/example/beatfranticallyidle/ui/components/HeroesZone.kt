@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.data.source.local.card.HeroInfo
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.IdleStage
-import com.example.beatfranticallyidle.viewmodel.IdleViewModel
+import com.example.beatfranticallyidle.viewmodel.CardUiState
+import com.example.beatfranticallyidle.viewmodel.CardViewModel
 
 @Composable
 fun HeroesZone(
@@ -38,8 +38,8 @@ fun HeroesZone(
     background: Int,
     paddingValues: PaddingValues,
     typeHero: Int,
-    idleViewModel: IdleViewModel,
-    idleUiState: IdleStage,
+    cardViewModel: CardViewModel,
+    cardUiStage: CardUiState,
 ) {
     val bottomPadding = paddingValues.calculateBottomPadding()
     Box(
@@ -62,18 +62,18 @@ fun HeroesZone(
             ) {
                 UnitCard(
                     modifier = modifier,
-                    currentHero = idleUiState.allListHero[typeHero][0],
-                    idleViewModel = idleViewModel,
+                    currentHero = cardUiStage.allListHero[typeHero][0],
+                    cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = idleUiState.allListHero[typeHero][1],
-                    idleViewModel = idleViewModel,
+                    currentHero = cardUiStage.allListHero[typeHero][1],
+                    cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = idleUiState.allListHero[typeHero][2],
-                    idleViewModel = idleViewModel,
+                    currentHero = cardUiStage.allListHero[typeHero][2],
+                    cardViewModel = cardViewModel,
                 )
             }
             Row(
@@ -81,18 +81,18 @@ fun HeroesZone(
             ) {
                 UnitCard(
                     modifier = modifier,
-                    currentHero = idleUiState.allListHero[typeHero][3],
-                    idleViewModel = idleViewModel,
+                    currentHero = cardUiStage.allListHero[typeHero][3],
+                    cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = idleUiState.allListHero[typeHero][4],
-                    idleViewModel = idleViewModel,
+                    currentHero = cardUiStage.allListHero[typeHero][4],
+                    cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = idleUiState.allListHero[typeHero][5],
-                    idleViewModel = idleViewModel,
+                    currentHero = cardUiStage.allListHero[typeHero][5],
+                    cardViewModel = cardViewModel,
                 )
             }
         }
@@ -103,11 +103,11 @@ fun HeroesZone(
 fun UnitCard(
     modifier: Modifier = Modifier,
     currentHero: HeroInfo.Hero,
-    idleViewModel: IdleViewModel,
+    cardViewModel: CardViewModel,
 ) {
     when {
         currentHero.discovered -> HeroRevealed(
-            idleViewModel = idleViewModel,
+            cardViewModel = cardViewModel,
             monsterUiState = currentHero,
             modifier = modifier.fillMaxSize(),
         )
@@ -122,8 +122,8 @@ fun UnitCard(
 @Composable
 private fun HeroRevealed(
     modifier: Modifier = Modifier,
-    idleViewModel: IdleViewModel,
     monsterUiState: HeroInfo.Hero,
+    cardViewModel: CardViewModel,
 ) {
     Box(
         modifier = modifier
@@ -131,7 +131,7 @@ private fun HeroRevealed(
             .fillMaxSize()
             .clickable(
                 role = Role.Image,
-                onClick = { idleViewModel.showingCardFullScreen(monsterUiState) },
+                onClick = { cardViewModel.showingCardFullScreen(monsterUiState) },
             ),
         contentAlignment = Alignment.Center
     ) {

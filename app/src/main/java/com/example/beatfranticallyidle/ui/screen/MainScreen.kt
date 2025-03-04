@@ -15,23 +15,29 @@ import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.ui.components.HeroesZone
 import com.example.beatfranticallyidle.ui.components.MonsterZone
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.IdleStage
-import com.example.beatfranticallyidle.viewmodel.IdleViewModel
+import com.example.beatfranticallyidle.viewmodel.CardUiState
+import com.example.beatfranticallyidle.viewmodel.CardViewModel
+import com.example.beatfranticallyidle.viewmodel.MonsterUiStage
+import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 
 @Composable
 fun MainScreen(
-    idleViewModel: IdleViewModel,
-    idleUiState: IdleStage,
+    monsterViewModel: MonsterViewModel,
+    idleUiState: MonsterUiStage,
     navController: NavHostController,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
+    cardUiState: CardUiState,
+    cardViewModel: CardViewModel,
 ) {
     Column(
         modifier = modifier
     ) {
         MonsterZone(
-            idleViewModel = idleViewModel,
+            monsterViewModel = monsterViewModel,
             idleUiState = idleUiState,
+            cardUiState = cardUiState,
+            cardViewModel = cardViewModel,
             paddingValues = paddingValues,
             modifier = Modifier
                 .fillMaxSize()
@@ -44,38 +50,38 @@ fun MainScreen(
         ) {
             composable(route = HeroCardRoute.FireHero.route) {
                 HeroesZone(
+                    cardViewModel = cardViewModel,
                     typeHero = 0,
                     background = R.drawable.background_sol_pondo,
-                    idleViewModel = idleViewModel,
-                    idleUiState = idleUiState,
                     paddingValues = paddingValues,
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
+                    cardUiStage = cardUiState,
                 )
             }
             composable(route = HeroCardRoute.PoisonHero.route) {
                 HeroesZone(
-                    background = R.drawable.background_toxic,
-                    paddingValues = paddingValues,
-                    typeHero = 1,
-                    idleViewModel = idleViewModel,
-                    idleUiState = idleUiState,
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
+                    background = R.drawable.background_toxic,
+                    paddingValues = paddingValues,
+                    typeHero = 1,
+                    cardViewModel = cardViewModel,
+                    cardUiStage = cardUiState,
                 )
             }
             composable(route = HeroCardRoute.LightningHero.route) {
                 HeroesZone(
-                    background = R.drawable.background_black_hole,
-                    paddingValues = paddingValues,
-                    typeHero = 2,
-                    idleViewModel = idleViewModel,
-                    idleUiState = idleUiState,
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
+                    background = R.drawable.background_black_hole,
+                    paddingValues = paddingValues,
+                    typeHero = 2,
+                    cardViewModel = cardViewModel,
+                    cardUiStage = cardUiState,
                 )
             }
         }
