@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.2"
+agp = "8.9.0"
 hilt = "2.53.1"
 kotlin = "2.1.10"
 coreKtx = "1.15.0"
@@ -12,7 +12,6 @@ composeBom = "2025.02.00"
 multidexVersion = "2.0.1"
 navigationCompose = "2.8.8"
 room = "2.6.1"
-timber = "5.0.1"
 kps = "2.1.10-1.0.29"
 
 [libraries]
@@ -40,7 +39,6 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

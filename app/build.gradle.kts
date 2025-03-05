@@ -51,36 +51,44 @@ android {
 
 dependencies {
 
+    // Core AndroidX
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.multidex) // Multidex support
+
+    // Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Compose UI
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.navigation.compose)
 
+    // Room Persistence
     implementation(libs.androidx.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    // Hilt Dependency Injection
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    // Testing (JUnit)
     testImplementation(libs.junit)
 
+    // Android Instrumented Tests
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
+    // Debugging Tools
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(libs.androidx.multidex)
-    implementation(libs.timber)
 }
