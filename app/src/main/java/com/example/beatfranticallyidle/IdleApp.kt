@@ -85,7 +85,7 @@ fun AppIdle(
             )
         }
         AnimatedVisibility(
-            visible = cardUiState.showHeroDetails,
+            visible = false,
             modifier = Modifier.fillMaxSize()
         ) {
             HeroCardFullScreen(
@@ -116,7 +116,7 @@ fun HeroCardFullScreen(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(cardUiState.currentHero.imageHero),
+            painter = painterResource(cardUiState.currentCard.imageResId),
             contentDescription = null,
             modifier = Modifier
                 .border(2.dp, Color.White)
@@ -132,7 +132,7 @@ fun HeroCardFullScreen(
                 .fillMaxSize(),
         ) {
             Text(
-                text = cardUiState.currentHero.name,
+                text = cardUiState.currentCard.name,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
@@ -145,7 +145,7 @@ fun HeroCardFullScreen(
                     .wrapContentSize()
             )
             Text(
-                text = cardUiState.currentHero.effect,
+                text = cardUiState.currentCard.effectDescription,
                 color = Color.White,
                 fontSize = 28.sp,
                 lineHeight = 28.sp,

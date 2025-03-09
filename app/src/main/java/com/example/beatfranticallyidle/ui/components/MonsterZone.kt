@@ -49,7 +49,7 @@ import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 @Composable
 fun MonsterZone(
     monsterViewModel: MonsterViewModel,
-    idleUiState: MonsterUiStage,
+    monsterUiStage: MonsterUiStage,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     cardViewModel: CardViewModel,
@@ -59,7 +59,7 @@ fun MonsterZone(
         modifier = modifier
     ) {
         Background(
-            idleUiState = idleUiState,
+            idleUiState = monsterUiStage,
             modifier = Modifier.fillMaxSize()
         )
         Box(
@@ -68,7 +68,7 @@ fun MonsterZone(
                 .padding(top = paddingValues.calculateTopPadding())
         ) {
             Monster(
-                idleUiState = idleUiState,
+                idleUiState = monsterUiStage,
                 monsterViewModel = monsterViewModel,
                 modifier = Modifier
                     .fillMaxSize()
@@ -79,7 +79,7 @@ fun MonsterZone(
                 modifier = Modifier
             ) {
                 IconAndCount(
-                    idleUiState = idleUiState.allReward.toString(),
+                    monsterUiStage = monsterUiStage.totalReward.toString(),
                     horArrangement = Arrangement.Start,
                     verAlignment = Alignment.Bottom,
                     iconImage = R.drawable.icone_coin,
@@ -106,7 +106,7 @@ fun MonsterZone(
                             modifier = Modifier.background(Color(0x50000000))
                         )
                         IconAndCount(
-                            idleUiState = cardUiState.purchaseCost.toString(),
+                            monsterUiStage = "ajeita depois",
                             horArrangement = Arrangement.Start,
                             verAlignment = Alignment.Top,
                             iconImage = R.drawable.icone_coin,
@@ -118,7 +118,7 @@ fun MonsterZone(
                 }
             }
             IconAndCount(
-                idleUiState = idleUiState.allDeath.toString(),
+                monsterUiStage = monsterUiStage.totalDeath.toString(),
                 horArrangement = Arrangement.End,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_caveira,
@@ -129,8 +129,9 @@ fun MonsterZone(
                     .padding(12.dp),
             )
             PreviousAndNextMonster(
+                cardViewModel = cardViewModel,
                 monsterViewModel = monsterViewModel,
-                idleUiState = idleUiState,
+                idleUiState = monsterUiStage,
                 modifier = Modifier
                     .fillMaxSize()
             )
@@ -145,14 +146,14 @@ fun MonsterZone(
                     .padding(4.dp)
             ) {
                 Text(
-                    text = idleUiState.currentMonster.name,
+                    text = monsterUiStage.currentMonster.name,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                 )
             }
             LifeProgress(
-                monsterUiState = idleUiState,
+                monsterUiState = monsterUiStage,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(50.dp)
@@ -234,7 +235,7 @@ private fun Monster(
                 .padding(20.dp)
         ) {
             IconAndCount(
-                idleUiState = idleUiState.currentMonster.rewardValue.toString(),
+                monsterUiStage = idleUiState.currentMonster.rewardValue.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_coin,
@@ -243,7 +244,7 @@ private fun Monster(
                 modifier = Modifier
             )
             IconAndCount(
-                idleUiState = idleUiState.currentMonster.deathCount.toString(),
+                monsterUiStage = idleUiState.currentMonster.deathCount.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.CenterVertically,
                 iconImage = idleUiState.currentMonster.iconResId,
@@ -262,7 +263,7 @@ private fun IconAndCount(
     verAlignment: Alignment.Vertical,
     @DrawableRes iconImage: Int,
     fontSize: Int,
-    idleUiState: String,
+    monsterUiStage: String,
     iconSize: Int,
     modifier: Modifier = Modifier
 ) {
@@ -284,7 +285,7 @@ private fun IconAndCount(
                     .size(iconSize.dp)
             )
             Text(
-                text = idleUiState,
+                text = monsterUiStage,
                 fontSize = fontSize.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -300,6 +301,7 @@ private fun PreviousAndNextMonster(
     monsterViewModel: MonsterViewModel,
     modifier: Modifier = Modifier,
     idleUiState: MonsterUiStage,
+    cardViewModel: CardViewModel,
 ) {
     Box(
         modifier = modifier
@@ -307,6 +309,7 @@ private fun PreviousAndNextMonster(
         Button(
             onClick = {
                 monsterViewModel.insertAllMonsters()
+                cardViewModel.loadAllCards()
             },
             modifier = Modifier.align(alignment = Alignment.TopEnd)
         ) {
@@ -334,8 +337,6 @@ private fun PreviousAndNextMonster(
         AnimatedVisibility(
             visible = (
                     idleUiState.currentMonster.deathCount > 0
-                            && idleUiState.lastMonsterIndex
-                            != idleUiState.currentMonsterIndex
                     ),
             enter = scaleIn(),
             exit = scaleOut(),

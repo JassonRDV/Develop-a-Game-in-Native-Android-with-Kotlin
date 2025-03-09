@@ -2,9 +2,14 @@ package com.example.beatfranticallyidle.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.beatfranticallyidle.data.source.DefaultMonsterRepository
-import com.example.beatfranticallyidle.data.source.local.monster.AppDatabase
+import com.example.beatfranticallyidle.data.source.local.AppDatabase
+import com.example.beatfranticallyidle.data.source.local.card.CardDao
+import com.example.beatfranticallyidle.data.source.local.card.CardRepository
+import com.example.beatfranticallyidle.data.source.local.card.CardRepositoryImpl
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterDao
+import com.example.beatfranticallyidle.data.source.local.monster.MonsterRepository
+import com.example.beatfranticallyidle.data.source.local.monster.MonsterRepositoryImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +19,20 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindMonsterRepository(impl: MonsterRepositoryImpl) : MonsterRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCardRepository(impl: CardRepositoryImpl) : CardRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
 
     @Provides
     @Singleton
@@ -32,8 +50,7 @@ object AppModule {
     fun provideMonsterDao(appDataBase: AppDatabase): MonsterDao =
         appDataBase.monsterDao()
 
-
     @Provides
-    fun provideMonsterRepository(monsterDao: MonsterDao): DefaultMonsterRepository =
-        DefaultMonsterRepository(monsterDao)
+    fun provideCardDao(appDataBase: AppDatabase): CardDao =
+        appDataBase.cardDao()
 }

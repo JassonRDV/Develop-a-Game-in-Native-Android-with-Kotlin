@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
-import com.example.beatfranticallyidle.data.source.local.card.HeroInfo
+import com.example.beatfranticallyidle.data.source.local.card.model.Card
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
@@ -62,17 +62,17 @@ fun HeroesZone(
             ) {
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.allListHero[typeHero][0],
+                    currentHero = cardUiStage.listCard[0],
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.allListHero[typeHero][1],
+                    currentHero = cardUiStage.listCard[1],
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.allListHero[typeHero][2],
+                    currentHero = cardUiStage.listCard[2],
                     cardViewModel = cardViewModel,
                 )
             }
@@ -81,17 +81,17 @@ fun HeroesZone(
             ) {
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.allListHero[typeHero][3],
+                    currentHero = cardUiStage.listCard[3],
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.allListHero[typeHero][4],
+                    currentHero = cardUiStage.listCard[4],
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.allListHero[typeHero][5],
+                    currentHero = cardUiStage.listCard[5],
                     cardViewModel = cardViewModel,
                 )
             }
@@ -102,7 +102,7 @@ fun HeroesZone(
 @Composable
 fun UnitCard(
     modifier: Modifier = Modifier,
-    currentHero: HeroInfo.Hero,
+    currentHero: Card,
     cardViewModel: CardViewModel,
 ) {
     when {
@@ -122,7 +122,7 @@ fun UnitCard(
 @Composable
 private fun HeroRevealed(
     modifier: Modifier = Modifier,
-    monsterUiState: HeroInfo.Hero,
+    monsterUiState: Card,
     cardViewModel: CardViewModel,
 ) {
     Box(
@@ -136,7 +136,7 @@ private fun HeroRevealed(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(monsterUiState.imageHero),
+            painter = painterResource(monsterUiState.imageResId),
             contentDescription = null,
             modifier = Modifier
                 .border(2.dp, Color.White)
@@ -164,7 +164,7 @@ private fun HeroRevealed(
                     .wrapContentSize()
             )
             Text(
-                text = monsterUiState.effect,
+                text = monsterUiState.effectDescription,
                 color = Color.White,
                 fontSize = 8.sp,
                 lineHeight = 8.sp,
@@ -184,7 +184,7 @@ private fun HeroRevealed(
 }
 
 @Composable
-private fun HeroHidden(modifier: Modifier = Modifier, currentHero: HeroInfo.Hero) {
+private fun HeroHidden(modifier: Modifier = Modifier, currentHero: Card) {
     Box(
         modifier = modifier
             .padding(8.dp)
@@ -192,7 +192,7 @@ private fun HeroHidden(modifier: Modifier = Modifier, currentHero: HeroInfo.Hero
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(currentHero.imageNull),
+            painter = painterResource(currentHero.cardElementId),
             contentDescription = null,
             modifier = Modifier
                 .border(2.dp, Color.White)

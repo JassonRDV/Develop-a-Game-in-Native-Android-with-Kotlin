@@ -18,5 +18,20 @@ interface MonsterDao {
     suspend fun updateMonster(nameMonster: String, deathCount: Int)
 
     @Query("SELECT * FROM monsters")
-    fun getAllMonsters(): Flow<List<MonsterEntity>>
+    fun getMonsters(): Flow<List<MonsterEntity>>
+
+    @Query("SELECT * FROM monsters WHERE id = :id")
+    fun getMonsterById(id: Int): Flow<MonsterEntity?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMonster(monster: MonsterEntity)
+
+    @Update
+    suspend fun updateMonster(monster: MonsterEntity)
+
+    @Delete
+    suspend fun deleteMonster(monster: MonsterEntity)
+
+    @Query("DELETE FROM monsters")
+    suspend fun deleteAllMonsters()
 }
