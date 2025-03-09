@@ -35,7 +35,7 @@ fun MainScreen(
     ) {
         MonsterZone(
             monsterViewModel = monsterViewModel,
-            idleUiState = idleUiState,
+            monsterUiStage = idleUiState,
             cardUiState = cardUiState,
             cardViewModel = cardViewModel,
             paddingValues = paddingValues,
@@ -49,16 +49,16 @@ fun MainScreen(
             modifier = Modifier.weight(1f)
         ) {
             composable(route = HeroCardRoute.FireHero.route) {
-                HeroesZone(
-                    cardViewModel = cardViewModel,
-                    typeHero = 0,
-                    background = R.drawable.background_sol_pondo,
-                    paddingValues = paddingValues,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    cardUiStage = cardUiState,
-                )
+//                HeroesZone(
+//                    cardViewModel = cardViewModel,
+//                    typeHero = 0,
+//                    background = R.drawable.background_sol_pondo,
+//                    paddingValues = paddingValues,
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .weight(1f),
+//                    cardUiStage = cardUiState,
+//                )
             }
             composable(route = HeroCardRoute.PoisonHero.route) {
                 HeroesZone(
