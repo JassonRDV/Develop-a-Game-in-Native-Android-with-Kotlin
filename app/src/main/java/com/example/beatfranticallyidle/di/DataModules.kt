@@ -9,6 +9,9 @@ import com.example.beatfranticallyidle.data.source.local.card.CardRepositoryImpl
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterDao
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterRepository
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterRepositoryImpl
+import com.example.beatfranticallyidle.data.source.local.reward.RewardDao
+import com.example.beatfranticallyidle.data.source.local.reward.RewardRepository
+import com.example.beatfranticallyidle.data.source.local.reward.RewardRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -28,6 +31,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindCardRepository(impl: CardRepositoryImpl) : CardRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRewardRepository(impl: RewardRepositoryImpl) : RewardRepository
 }
 
 @Module
@@ -53,4 +60,8 @@ object DatabaseModule {
     @Provides
     fun provideCardDao(appDataBase: AppDatabase): CardDao =
         appDataBase.cardDao()
+
+    @Provides
+    fun provideRewardDao(appDataBase: AppDatabase) : RewardDao =
+        appDataBase.rewardDao()
 }

@@ -35,6 +35,7 @@ import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
+import com.example.beatfranticallyidle.viewmodel.RewardViewModel
 
 sealed class HeroCardRoute(val route: String) {
     object FireHero : HeroCardRoute("FireHero")
@@ -46,10 +47,13 @@ sealed class HeroCardRoute(val route: String) {
 fun AppIdle(
     monsterViewModel: MonsterViewModel = viewModel(),
     cardViewModel: CardViewModel = viewModel(),
+    rewardViewModel: RewardViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val idleUiState by monsterViewModel.uiState.collectAsState()
     val cardUiState by cardViewModel.uiState.collectAsState()
+    val rewardUiState by rewardViewModel.uiState.collectAsState()
+
     val navController = rememberNavController()
     Box(
         contentAlignment = Alignment.Center,
@@ -75,6 +79,8 @@ fun AppIdle(
             modifier = Modifier
         ) { paddingValues ->
             MainScreen(
+                rewardViewModel = rewardViewModel,
+                rewardUiState = rewardUiState,
                 cardViewModel = cardViewModel,
                 cardUiState = cardUiState,
                 monsterViewModel = monsterViewModel,
@@ -85,7 +91,7 @@ fun AppIdle(
             )
         }
         AnimatedVisibility(
-            visible = false,
+            visible = cardUiState.showCardFullScreen,
             modifier = Modifier.fillMaxSize()
         ) {
             HeroCardFullScreen(
@@ -115,12 +121,14 @@ fun HeroCardFullScreen(
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(cardUiState.currentCard.imageResId),
-            contentDescription = null,
-            modifier = Modifier
-                .border(2.dp, Color.White)
-        )
+        cardUiState.currentCard?.let { painterResource(it.imageResId) }?.let {
+            Image(
+                painter = it,
+                contentDescription = null,
+                modifier = Modifier
+                    .border(2.dp, Color.White)
+            )
+        }
         Box(
             modifier = Modifier
                 .padding(
@@ -131,30 +139,34 @@ fun HeroCardFullScreen(
                 )
                 .fillMaxSize(),
         ) {
-            Text(
-                text = cardUiState.currentCard.name,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
-                lineHeight = 30.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .align(alignment = Alignment.TopCenter)
-                    .background(Color(0x90000000))
-                    .wrapContentSize()
-            )
-            Text(
-                text = cardUiState.currentCard.effectDescription,
-                color = Color.White,
-                fontSize = 28.sp,
-                lineHeight = 28.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomCenter)
-                    .background(Color(0x90000000))
-                    .wrapContentSize()
-            )
+            cardUiState.currentCard?.name?.let {
+                Text(
+                    text = it,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp,
+                    lineHeight = 30.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .align(alignment = Alignment.TopCenter)
+                        .background(Color(0x90000000))
+                        .wrapContentSize()
+                )
+            }
+            cardUiState.currentCard?.let {
+                Text(
+                    text = it.effectDescription,
+                    color = Color.White,
+                    fontSize = 28.sp,
+                    lineHeight = 28.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .align(alignment = Alignment.BottomCenter)
+                        .background(Color(0x90000000))
+                        .wrapContentSize()
+                )
+            }
         }
     }
 }

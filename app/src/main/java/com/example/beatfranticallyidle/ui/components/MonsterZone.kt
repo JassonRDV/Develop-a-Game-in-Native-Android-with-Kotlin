@@ -45,6 +45,8 @@ import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
 import com.example.beatfranticallyidle.viewmodel.MonsterUiStage
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
+import com.example.beatfranticallyidle.viewmodel.RewardUiState
+import com.example.beatfranticallyidle.viewmodel.RewardViewModel
 
 @Composable
 fun MonsterZone(
@@ -54,6 +56,8 @@ fun MonsterZone(
     modifier: Modifier = Modifier,
     cardViewModel: CardViewModel,
     cardUiState: CardUiState,
+    rewardUiState: RewardUiState,
+    rewardViewModel: RewardViewModel,
 ) {
     Box(
         modifier = modifier
@@ -79,7 +83,7 @@ fun MonsterZone(
                 modifier = Modifier
             ) {
                 IconAndCount(
-                    monsterUiStage = monsterUiStage.totalReward.toString(),
+                    monsterUiStage = rewardUiState.gold.toString(),
                     horArrangement = Arrangement.Start,
                     verAlignment = Alignment.Bottom,
                     iconImage = R.drawable.icone_coin,
@@ -106,7 +110,7 @@ fun MonsterZone(
                             modifier = Modifier.background(Color(0x50000000))
                         )
                         IconAndCount(
-                            monsterUiStage = "ajeita depois",
+                            monsterUiStage = "100",
                             horArrangement = Arrangement.Start,
                             verAlignment = Alignment.Top,
                             iconImage = R.drawable.icone_coin,
@@ -118,7 +122,7 @@ fun MonsterZone(
                 }
             }
             IconAndCount(
-                monsterUiStage = monsterUiStage.totalDeath.toString(),
+                monsterUiStage = rewardUiState.death.toString(),
                 horArrangement = Arrangement.End,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_caveira,
@@ -129,6 +133,7 @@ fun MonsterZone(
                     .padding(12.dp),
             )
             PreviousAndNextMonster(
+                rewardViewModel = rewardViewModel,
                 cardViewModel = cardViewModel,
                 monsterViewModel = monsterViewModel,
                 idleUiState = monsterUiStage,
@@ -145,12 +150,14 @@ fun MonsterZone(
                     )
                     .padding(4.dp)
             ) {
-                Text(
-                    text = monsterUiStage.currentMonster.name,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                )
+                monsterUiStage.currentMonster?.let {
+                    Text(
+                        text = it.name,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                    )
+                }
             }
             LifeProgress(
                 monsterUiState = monsterUiStage,
@@ -167,12 +174,14 @@ private fun Background(
     modifier: Modifier = Modifier,
     idleUiState: MonsterUiStage,
 ) {
-    Image(
-        painter = painterResource(idleUiState.currentMonster.arenaResId),
+    idleUiState.currentMonster?.let { painterResource(it.arenaResId) }?.let {
+        Image(
+            painter = it,
         contentScale = ContentScale.FillHeight,
         contentDescription = null,
         modifier = modifier
     )
+    }
 }
 
 @Composable
@@ -181,8 +190,9 @@ private fun LifeProgress(monsterUiState: MonsterUiStage, modifier: Modifier = Mo
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
     ) {
-        val progress = monsterUiState.currentMonster.currentLife /
-                monsterUiState.currentMonster.maxLife
+        val progress = monsterUiState.currentMonster?.let {
+            (it.currentLife / it.maxLife)
+        } ?: 0f
         LinearProgressIndicator(
             progress = { progress },
             modifier = Modifier.size(width = 250.dp, height = 24.dp),
@@ -190,8 +200,8 @@ private fun LifeProgress(monsterUiState: MonsterUiStage, modifier: Modifier = Mo
             trackColor = Color.Transparent,
         )
         Text(
-            text = "${monsterUiState.currentMonster.currentLife.toInt()}/" +
-                    "${monsterUiState.currentMonster.maxLife.toInt()}",
+            text = "${monsterUiState.currentMonster?.currentLife?.toInt()}/" +
+                    "${monsterUiState.currentMonster?.maxLife?.toInt()}",
             color = Color.White,
             fontWeight = FontWeight.Bold,
         )
@@ -209,23 +219,26 @@ private fun Monster(
     ) {
         AnimatedVisibility(
             visible = !idleUiState.monsterDead,
+            enter = scaleIn(),
             exit = scaleOut(),
             modifier = Modifier.fillMaxSize()
         ) {
-            Image(
-                painter = painterResource(idleUiState.currentMonster.imageResId),
-                contentScale = ContentScale.Fit,
-                contentDescription = null,
-                colorFilter = if (idleUiState.tookDamage) ColorFilter.tint(Color.White)
-                else null,
-                modifier = Modifier
-                    .clickable(
-                        role = Role.Image,
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = { monsterViewModel.monsterTookDamage() }
-                    )
-            )
+            idleUiState.currentMonster?.let { painterResource(it.imageResId) }?.let {
+                Image(
+                    painter = it,
+                    contentScale = ContentScale.Fit,
+                    contentDescription = null,
+                    colorFilter = if (idleUiState.tookDamage) ColorFilter.tint(Color.White)
+                    else null,
+                    modifier = Modifier
+                        .clickable(
+                            role = Role.Image,
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = { monsterViewModel.monsterTookDamage() }
+                        )
+                )
+            }
         }
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -235,7 +248,7 @@ private fun Monster(
                 .padding(20.dp)
         ) {
             IconAndCount(
-                monsterUiStage = idleUiState.currentMonster.rewardValue.toString(),
+                monsterUiStage = idleUiState.currentMonster?.rewardValue.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_coin,
@@ -243,15 +256,17 @@ private fun Monster(
                 iconSize = 24,
                 modifier = Modifier
             )
-            IconAndCount(
-                monsterUiStage = idleUiState.currentMonster.deathCount.toString(),
-                horArrangement = Arrangement.Center,
-                verAlignment = Alignment.CenterVertically,
-                iconImage = idleUiState.currentMonster.iconResId,
-                fontSize = 20,
-                iconSize = 24,
-                modifier = Modifier
-            )
+            idleUiState.currentMonster?.let {
+                IconAndCount(
+                    monsterUiStage = it.deathCount.toString(),
+                    horArrangement = Arrangement.Center,
+                    verAlignment = Alignment.CenterVertically,
+                    iconImage = it.iconResId,
+                    fontSize = 20,
+                    iconSize = 24,
+                    modifier = Modifier
+                )
+            }
 
         }
     }
@@ -302,6 +317,7 @@ private fun PreviousAndNextMonster(
     modifier: Modifier = Modifier,
     idleUiState: MonsterUiStage,
     cardViewModel: CardViewModel,
+    rewardViewModel: RewardViewModel,
 ) {
     Box(
         modifier = modifier
@@ -310,6 +326,7 @@ private fun PreviousAndNextMonster(
             onClick = {
                 monsterViewModel.insertAllMonsters()
                 cardViewModel.loadAllCards()
+                rewardViewModel.insertReward()
             },
             modifier = Modifier.align(alignment = Alignment.TopEnd)
         ) {
@@ -336,7 +353,7 @@ private fun PreviousAndNextMonster(
         }
         AnimatedVisibility(
             visible = (
-                    idleUiState.currentMonster.deathCount > 0
+                    (idleUiState.currentMonster?.deathCount ?: 0) > 0
                     ),
             enter = scaleIn(),
             exit = scaleOut(),

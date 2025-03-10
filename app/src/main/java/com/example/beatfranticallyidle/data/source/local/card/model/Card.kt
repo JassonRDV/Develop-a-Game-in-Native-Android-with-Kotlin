@@ -3,11 +3,12 @@ package com.example.beatfranticallyidle.data.source.local.card.model
 import androidx.annotation.DrawableRes
 import com.example.beatfranticallyidle.data.source.local.card.CardEntity
 import com.example.beatfranticallyidle.data.source.local.card.CardTypeEntity
+import com.example.beatfranticallyidle.data.source.local.card.CardWithCardTypeEntity
 
 enum class CardElement(val value: Int) {
     FIRE(0),
-    LIGHTNING(1),
-    POISON(2),
+    POISON(1),
+    LIGHTNING(2),
     LIGHT(3);
 
     companion object {
@@ -73,6 +74,18 @@ data class Card(
             effectActivated = effectActivated,
             numberCardCount = numberCardCount,
             cardElementId = cardElementId,
+        )
+    }
+}
+
+data class CardWithCardType(
+    val cardType: CardType,
+    val cards: List<Card>
+) {
+    fun toCardWithCardTypeEntity(): CardWithCardTypeEntity {
+        return CardWithCardTypeEntity(
+            cardType = cardType.toCardTypeEntity(),
+            cards = cards.map { it.toCardEntity() }
         )
     }
 }
