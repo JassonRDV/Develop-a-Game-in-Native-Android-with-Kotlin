@@ -11,9 +11,16 @@ import com.example.beatfranticallyidle.data.source.local.card.model.CardElement
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterDao
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.data.source.local.monster.model.RewardType
+import com.example.beatfranticallyidle.data.source.local.reward.RewardDao
+import com.example.beatfranticallyidle.data.source.local.reward.RewardEntity
 
 @Database(
-    entities = [MonsterEntity::class, CardTypeEntity::class, CardEntity::class],
+    entities = [
+        MonsterEntity::class,
+        CardTypeEntity::class,
+        CardEntity::class,
+        RewardEntity::class
+    ],
     version = 1,
     exportSchema = false
 )
@@ -22,6 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun monsterDao(): MonsterDao
     abstract fun cardDao(): CardDao
+    abstract fun rewardDao(): RewardDao
 }
 
 class Converters {

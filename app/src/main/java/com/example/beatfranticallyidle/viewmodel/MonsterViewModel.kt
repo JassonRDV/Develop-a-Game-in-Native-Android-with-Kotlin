@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterRepository
 import com.example.beatfranticallyidle.data.source.local.monster.listMonsterEntity
-import com.example.beatfranticallyidle.data.source.local.monster.model.GenericMonster
 import com.example.beatfranticallyidle.data.source.local.monster.model.Monster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,33 +16,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class MonsterUiStage(
-    val isLoading: Boolean = true,
-    val monsterList: List<Monster> = emptyList(),
-    val currentMonster: Monster = GenericMonster,
-    val currentMonsterIndex: Int = 0,
-    val tookDamage: Boolean = false,
-    val monsterDead: Boolean = false,
-    var totalReward: Float = 0f, // TODO criar um ViewModel para isso
-    val totalDeath: Int = 0, // TODO criar um ViewModel para isso
-    val errorMonster: String? = null
-)
-
 @HiltViewModel
 class MonsterViewModel @Inject constructor(
     private val monsterRepository: MonsterRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MonsterUiStage())
-    val uiState: StateFlow<MonsterUiStage> = _uiState.asStateFlow()
 
+    val uiState: StateFlow<MonsterUiStage> = _uiState.asStateFlow()
     init {
         loadMonster()
     }
 
-    /**
-     * Loads monsters from the repository, updating the UI state with the results.
-     **/
     private fun loadMonster() {
         _uiState.update { it.copy(isLoading = true, errorMonster = null) }
         viewModelScope.launch {
@@ -52,7 +36,7 @@ class MonsterViewModel @Inject constructor(
                     _uiState.update { currentState ->
                         currentState.copy(
                             monsterList = monsterList,
-                            currentMonster = monsterList.firstOrNull() ?: GenericMonster,
+                            currentMonster = monsterList.firstOrNull(),
                             isLoading = false,
                             errorMonster = null
                         )
@@ -69,14 +53,20 @@ class MonsterViewModel @Inject constructor(
     }
 
     fun previousMonster() {
-        val newIndex = (_uiState.value.currentMonsterIndex - 1).coerceAtLeast(0)
-        updateCurrentMonster(newIndex)
+        val newIndex = (_uiState.value.currentMonsterIndex?.minus(1))
+            ?.coerceAtLeast(0)
+        if (newIndex != null) {
+            updateCurrentMonster(newIndex)
+        }
     }
 
     fun nextMonster() {
         val newIndex =
-            (_uiState.value.currentMonsterIndex + 1).coerceAtMost(_uiState.value.monsterList.lastIndex)
-        updateCurrentMonster(newIndex)
+            (_uiState.value.currentMonsterIndex?.plus(1))
+                ?.coerceAtMost(_uiState.value.monsterList.lastIndex)
+        if (newIndex != null) {
+            updateCurrentMonster(newIndex)
+        }
     }
 
     private fun updateCurrentMonster(newIndex: Int) {
@@ -95,23 +85,24 @@ class MonsterViewModel @Inject constructor(
     }
 
     /* TODO vou ter que centralizar todas as fontes de dano e alem de fazer essa função
-    * TODO seja chamada todas as vezes que o monstro toma dano
-    */
+    *  TODO seja chamada todas as vezes que o monstro toma dano */
     fun monsterTookDamage() {
         val currentMonster = _uiState.value.currentMonster
-        if (currentMonster.isAlive()) {
-            viewModelScope.launch {
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        tookDamage = true,
-                        currentMonster = currentMonster.takeDamage(1f)
-                    )
-                }
-                delay(50)
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        tookDamage = false,
-                    )
+        if (currentMonster != null) {
+            if (currentMonster.isAlive()) {
+                viewModelScope.launch {
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            tookDamage = true,
+                            currentMonster = currentMonster.takeDamage(1f)
+                        )
+                    }
+                    delay(50)
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            tookDamage = false,
+                        )
+                    }
                 }
                 if (!currentMonster.isAlive()) {
                     monsterDied()
@@ -121,21 +112,27 @@ class MonsterViewModel @Inject constructor(
     }
 
     private fun monsterDied() {
-        val currentMonster = _uiState.value.currentMonster
         viewModelScope.launch {
             _uiState.update { currentState ->
                 currentState.copy(
                     monsterDead = true,
-                    currentMonster = currentMonster.die()
                 )
             }
             delay(200)
             _uiState.update { currentState ->
                 currentState.copy(
                     monsterDead = false,
+                    currentMonster = currentState.currentMonster?.die()
+                )
+            }
+            _uiState.value.currentMonster?.let {
+                monsterRepository.updateMonster(
+                    it.name,
+                    it.deathCount
                 )
             }
         }
+        _uiState.value.currentMonsterIndex?.let { updateCurrentMonster(it) }
     }
 
     // I will only use it to start the database
@@ -148,3 +145,13 @@ class MonsterViewModel @Inject constructor(
         }
     }
 }
+
+data class MonsterUiStage(
+    val isLoading: Boolean = true,
+    val monsterList: List<Monster> = emptyList(),
+    val currentMonster: Monster? = null,
+    val currentMonsterIndex: Int? = null,
+    val tookDamage: Boolean = false,
+    val monsterDead: Boolean = false,
+    val errorMonster: String? = null
+)

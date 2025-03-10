@@ -2,6 +2,7 @@ package com.example.beatfranticallyidle.data.source.local.card
 
 import com.example.beatfranticallyidle.data.source.local.card.model.Card
 import com.example.beatfranticallyidle.data.source.local.card.model.CardType
+import com.example.beatfranticallyidle.data.source.local.card.model.CardWithCardType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,9 +19,6 @@ class CardRepositoryImpl @Inject constructor(
     override suspend fun insertAllCards(cards: List<Card>) =
         cardDao.insertAllCards(cards.map { it.toCardEntity() })
 
-    override fun getAllCardsWithCardType(): Flow<List<CardWithCardType>> =
-        cardDao.getAllCardsWithCardType()
-
     override fun getAllCardTypes(): Flow<List<CardType>> =
         cardDao.getAllCardTypes().map { cardTypeEntities ->
             cardTypeEntities.map { it.toCardType() }
@@ -29,5 +27,10 @@ class CardRepositoryImpl @Inject constructor(
     override fun getAllCards(): Flow<List<Card>> =
         cardDao.getAllCards().map { cardEntities ->
             cardEntities.map { it.toCard() }
+        }
+
+    override fun getAllCardsWithCardType(): Flow<List<CardWithCardType>> =
+        cardDao.getAllCardsWithCardType().map { cardWithCardTypeEntities ->
+            cardWithCardTypeEntities.map { it.toCardWithCardType() }
         }
 }

@@ -11,6 +11,7 @@ import com.example.beatfranticallyidle.data.source.local.card.model.Card
 import com.example.beatfranticallyidle.data.source.local.card.model.CardEffect
 import com.example.beatfranticallyidle.data.source.local.card.model.CardElement
 import com.example.beatfranticallyidle.data.source.local.card.model.CardType
+import com.example.beatfranticallyidle.data.source.local.card.model.CardWithCardType
 
 @Entity(tableName = "card_elements")
 data class CardTypeEntity(
@@ -65,11 +66,18 @@ data class CardEntity(
     }
 }
 
-data class CardWithCardType(
+data class CardWithCardTypeEntity(
     @Embedded val cardType: CardTypeEntity,
     @Relation(
         parentColumn = "id",
         entityColumn = "cardElementId"
     )
     val cards: List<CardEntity>
-)
+) {
+    fun toCardWithCardType(): CardWithCardType {
+        return CardWithCardType(
+            cardType = cardType.toCardType(),
+            cards = cards.map { it.toCard() }
+        )
+    }
+}

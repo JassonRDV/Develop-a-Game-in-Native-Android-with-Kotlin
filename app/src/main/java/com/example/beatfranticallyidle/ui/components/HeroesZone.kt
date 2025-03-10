@@ -23,23 +23,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.data.source.local.card.model.Card
-import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
+import com.example.beatfranticallyidle.data.source.local.card.model.genericHero
 import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
 
 @Composable
 fun HeroesZone(
-    modifier: Modifier = Modifier,
     background: Int,
     paddingValues: PaddingValues,
-    typeHero: Int,
     cardViewModel: CardViewModel,
-    cardUiStage: CardUiState,
+    currentCard: CardUiState,
+    modifier: Modifier = Modifier,
 ) {
     val bottomPadding = paddingValues.calculateBottomPadding()
     Box(
@@ -62,17 +59,17 @@ fun HeroesZone(
             ) {
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.listCard[0],
+                    currentCard = currentCard.listCard?.get(0) ?: genericHero,
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.listCard[1],
+                    currentCard = currentCard.listCard?.get(1) ?: genericHero,
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.listCard[2],
+                    currentCard = currentCard.listCard?.get(2) ?: genericHero,
                     cardViewModel = cardViewModel,
                 )
             }
@@ -81,17 +78,17 @@ fun HeroesZone(
             ) {
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.listCard[3],
+                    currentCard = currentCard.listCard?.get(3) ?: genericHero,
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.listCard[4],
+                    currentCard = currentCard.listCard?.get(4) ?: genericHero,
                     cardViewModel = cardViewModel,
                 )
                 UnitCard(
                     modifier = modifier,
-                    currentHero = cardUiStage.listCard[5],
+                    currentCard = currentCard.listCard?.get(5) ?: genericHero,
                     cardViewModel = cardViewModel,
                 )
             }
@@ -101,19 +98,18 @@ fun HeroesZone(
 
 @Composable
 fun UnitCard(
-    modifier: Modifier = Modifier,
-    currentHero: Card,
+    currentCard: Card,
     cardViewModel: CardViewModel,
+    modifier: Modifier = Modifier,
 ) {
-    when {
-        currentHero.discovered -> HeroRevealed(
+    when(currentCard.discovered) {
+        true -> HeroRevealed(
             cardViewModel = cardViewModel,
-            monsterUiState = currentHero,
+            currentHero = currentCard,
             modifier = modifier.fillMaxSize(),
         )
-
         else -> HeroHidden(
-            currentHero = currentHero,
+            currentHero = currentCard,
             modifier = modifier
         )
     }
@@ -121,9 +117,9 @@ fun UnitCard(
 
 @Composable
 private fun HeroRevealed(
-    modifier: Modifier = Modifier,
-    monsterUiState: Card,
+    currentHero: Card,
     cardViewModel: CardViewModel,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
@@ -131,12 +127,12 @@ private fun HeroRevealed(
             .fillMaxSize()
             .clickable(
                 role = Role.Image,
-                onClick = { cardViewModel.showingCardFullScreen(monsterUiState) },
+                onClick = { cardViewModel.showingCardFullScreen(currentHero) },
             ),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(monsterUiState.imageResId),
+            painter = painterResource(currentHero.imageResId),
             contentDescription = null,
             modifier = Modifier
                 .border(2.dp, Color.White)
@@ -147,7 +143,7 @@ private fun HeroRevealed(
                 .fillMaxSize(),
         ) {
             Text(
-                text = monsterUiState.name,
+                text = currentHero.name,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 8.sp,
@@ -164,7 +160,7 @@ private fun HeroRevealed(
                     .wrapContentSize()
             )
             Text(
-                text = monsterUiState.effectDescription,
+                text = currentHero.effectDescription,
                 color = Color.White,
                 fontSize = 8.sp,
                 lineHeight = 8.sp,
@@ -184,7 +180,10 @@ private fun HeroRevealed(
 }
 
 @Composable
-private fun HeroHidden(modifier: Modifier = Modifier, currentHero: Card) {
+private fun HeroHidden(
+    modifier: Modifier = Modifier,
+    currentHero: Card
+) {
     Box(
         modifier = modifier
             .padding(8.dp)
@@ -192,18 +191,13 @@ private fun HeroHidden(modifier: Modifier = Modifier, currentHero: Card) {
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(currentHero.cardElementId),
+            painter = painterResource(currentHero.imageTypeResId),
             contentDescription = null,
             modifier = Modifier
-                .border(2.dp, Color.White)
+                .border(
+                    2.dp,
+                    Color.White
+                )
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HeroesZonePreview() {
-    BeatFranticallyIdleTheme {
-        AppIdle()
     }
 }

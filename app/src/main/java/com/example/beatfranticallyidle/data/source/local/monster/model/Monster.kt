@@ -1,7 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local.monster.model
 
 import androidx.annotation.DrawableRes
-import com.example.beatfranticallyidle.R
 
 enum class RewardType { GOLD, SOUL, NULL }
 
@@ -58,27 +57,12 @@ data class Monster(
     fun die(): Monster {
         val newDeathCount = increaseDeathCount()
         val newMaxLife = increaseMaxLife()
-        val newRewardValue = increaseRewardValue(1.1f)
         val newCurrentLife = resetLife()
         return copy(
             deathCount = newDeathCount,
             currentLife = newCurrentLife,
             maxLife = newMaxLife,
-            rewardValue = newRewardValue
         )
     }
 }
 
-val GenericMonster =
-    Monster(
-        imageResId = R.drawable.monster_placeholder,
-        iconResId = R.drawable.monster_icone_placeholder,
-        arenaResId = R.drawable.background_placeholder,
-        name = "Monster",
-        maxLife = 1f,
-        currentLife = 1f,
-        rewardType = RewardType.NULL,
-        rewardValue = 1f,
-        deathCount = 0,
-        description = ""
-    )
