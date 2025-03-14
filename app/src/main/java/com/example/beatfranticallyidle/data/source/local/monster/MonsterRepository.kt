@@ -9,7 +9,6 @@ interface MonsterRepository {
     fun getMonsters(): Flow<List<Monster>>
     fun getMonsterById(id: Int): Flow<Monster?>
     suspend fun insertMonster(monster: Monster)
-    suspend fun updateMonster(monster: Monster)
     suspend fun deleteMonster(monster: Monster)
     suspend fun deleteAllMonsters()
 }

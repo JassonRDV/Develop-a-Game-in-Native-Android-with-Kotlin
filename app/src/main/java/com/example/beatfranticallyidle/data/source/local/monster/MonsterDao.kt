@@ -26,9 +26,6 @@ interface MonsterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMonster(monster: MonsterEntity)
 
-    @Update
-    suspend fun updateMonster(monster: MonsterEntity)
-
     @Delete
     suspend fun deleteMonster(monster: MonsterEntity)
 
