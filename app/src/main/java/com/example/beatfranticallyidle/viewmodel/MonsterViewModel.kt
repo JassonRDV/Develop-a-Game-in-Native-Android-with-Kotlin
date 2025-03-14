@@ -22,21 +22,27 @@ class MonsterViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MonsterUiStage())
-
     val uiState: StateFlow<MonsterUiStage> = _uiState.asStateFlow()
+
     init {
         loadMonster()
     }
 
     private fun loadMonster() {
-        _uiState.update { it.copy(isLoading = true, errorMonster = null) }
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                errorMonster = null
+            )
+        }
         viewModelScope.launch {
             try {
                 monsterRepository.getMonsters().collectLatest { monsterList ->
                     _uiState.update { currentState ->
                         currentState.copy(
                             monsterList = monsterList,
-                            currentMonster = monsterList.firstOrNull(),
+                            currentMonster = monsterList[currentState.currentMonsterIndex ?: 0],
+                            currentMonsterIndex = 0,
                             isLoading = false,
                             errorMonster = null
                         )
@@ -45,7 +51,8 @@ class MonsterViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
-                        isLoading = false, errorMonster = "Error loading monsters: ${e.message}"
+                        isLoading = false,
+                        errorMonster = "Error loading monsters: ${e.message}"
                     )
                 }
             }
@@ -53,39 +60,34 @@ class MonsterViewModel @Inject constructor(
     }
 
     fun previousMonster() {
-        val newIndex = (_uiState.value.currentMonsterIndex?.minus(1))
-            ?.coerceAtLeast(0)
-        if (newIndex != null) {
-            updateCurrentMonster(newIndex)
-        }
+        updateMonsterUiStage(
+            _uiState.value.currentMonsterIndex
+                ?.minus(1)
+                ?.coerceAtLeast(0) ?: 0
+        )
     }
 
     fun nextMonster() {
-        val newIndex =
-            (_uiState.value.currentMonsterIndex?.plus(1))
-                ?.coerceAtMost(_uiState.value.monsterList.lastIndex)
-        if (newIndex != null) {
-            updateCurrentMonster(newIndex)
-        }
+        updateMonsterUiStage(
+            _uiState.value.currentMonsterIndex
+                ?.plus(1)
+                ?.coerceAtMost(_uiState.value.monsterList.lastIndex) ?: 0
+        )
     }
 
-    private fun updateCurrentMonster(newIndex: Int) {
-        val monsterList = _uiState.value.monsterList
-        if (newIndex in monsterList.indices) {
+    private fun updateMonsterUiStage(newIndex: Int) {
+        val monsters = _uiState.value.monsterList
+        if (newIndex in monsters.indices && monsters.isNotEmpty()) {
             _uiState.update { currentState ->
                 currentState.copy(
-                    currentMonster = monsterList[newIndex],
+                    currentMonster = monsters[newIndex],
                     currentMonsterIndex = newIndex,
                     errorMonster = null
                 )
             }
-        } else {
-            _uiState.update { it.copy(errorMonster = "Invalid Monster Index") }
         }
     }
 
-    /* TODO vou ter que centralizar todas as fontes de dano e alem de fazer essa função
-    *  TODO seja chamada todas as vezes que o monstro toma dano */
     fun monsterTookDamage() {
         val currentMonster = _uiState.value.currentMonster
         if (currentMonster != null) {
@@ -103,28 +105,38 @@ class MonsterViewModel @Inject constructor(
                             tookDamage = false,
                         )
                     }
-                }
-                if (!currentMonster.isAlive()) {
-                    monsterDied()
+                    if (_uiState.value.currentMonster?.isAlive() == false) {
+                        monsterDied()
+                    }
                 }
             }
         }
     }
 
     private fun monsterDied() {
+        val currentMonster = _uiState.value.currentMonster
+        if (currentMonster != null) {
+            viewModelScope.launch {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        monsterDead = true,
+                    )
+                }
+                delay(200)
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        monsterDead = false,
+                        currentMonster = currentState.currentMonster?.die(),
+                        currentMonsterIndex = currentState.currentMonsterIndex
+                    )
+                }
+                updateMonsterSQLite()
+            }
+        }
+    }
+
+    private fun updateMonsterSQLite() {
         viewModelScope.launch {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    monsterDead = true,
-                )
-            }
-            delay(200)
-            _uiState.update { currentState ->
-                currentState.copy(
-                    monsterDead = false,
-                    currentMonster = currentState.currentMonster?.die()
-                )
-            }
             _uiState.value.currentMonster?.let {
                 monsterRepository.updateMonster(
                     it.name,
@@ -132,10 +144,8 @@ class MonsterViewModel @Inject constructor(
                 )
             }
         }
-        _uiState.value.currentMonsterIndex?.let { updateCurrentMonster(it) }
     }
 
-    // I will only use it to start the database
     fun insertAllMonsters(allMonsters: List<Monster> = listMonsterEntity) {
         viewModelScope.launch {
             val monsterList = monsterRepository.getMonsters().firstOrNull()
@@ -155,3 +165,4 @@ data class MonsterUiStage(
     val monsterDead: Boolean = false,
     val errorMonster: String? = null
 )
+

@@ -19,6 +19,7 @@ data class Monster(
 ) {
 
     fun takeDamage(damage: Float): Monster {
+
         var newCurrentLife = currentLife - damage
         if (newCurrentLife < 0) {
             newCurrentLife = 0f
@@ -27,41 +28,43 @@ data class Monster(
     }
 
     fun isAlive(): Boolean {
+
         return currentLife > 0
     }
 
     private fun resetLife(): Float {
+
         val life = maxLife
         return life
     }
 
-    /**
-     * Após cada morte do monstro aumento a sua vida maxima em 20%,
-     * aumentando assim a dificuldade
-     **/
     private fun increaseMaxLife(): Float {
+
         val newMaxLife = maxLife * 1.2f
         return newMaxLife
     }
 
     private fun increaseRewardValue(increase: Float): Float {
+
         val valor = rewardValue * increase
         return valor
     }
 
     private fun increaseDeathCount(): Int {
+
         val newDeathCount = deathCount + 1
         return newDeathCount
     }
 
     fun die(): Monster {
-        val newDeathCount = increaseDeathCount()
+
         val newMaxLife = increaseMaxLife()
+        val newDeathCount = increaseDeathCount()
         val newCurrentLife = resetLife()
         return copy(
+            maxLife = newMaxLife,
             deathCount = newDeathCount,
             currentLife = newCurrentLife,
-            maxLife = newMaxLife,
         )
     }
 }

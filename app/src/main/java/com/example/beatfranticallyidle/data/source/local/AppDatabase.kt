@@ -26,7 +26,6 @@ import com.example.beatfranticallyidle.data.source.local.reward.RewardEntity
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun monsterDao(): MonsterDao
     abstract fun cardDao(): CardDao
     abstract fun rewardDao(): RewardDao

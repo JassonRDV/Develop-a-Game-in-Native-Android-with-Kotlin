@@ -22,9 +22,6 @@ class MonsterRepositoryImpl @Inject constructor(
     override suspend fun updateMonster(nameMonster: String, deathCount: Int) =
         monsterDao.updateMonster(nameMonster, deathCount)
 
-    override suspend fun updateMonster(monster: Monster) =
-        monsterDao.updateMonster(monster.toMonsterEntity())
-
     override fun getMonsterById(id: Int): Flow<Monster?> =
         monsterDao.getMonsterById(id).map { it?.toMonster() }
 

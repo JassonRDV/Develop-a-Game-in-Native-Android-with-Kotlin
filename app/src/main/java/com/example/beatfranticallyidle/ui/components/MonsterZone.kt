@@ -72,7 +72,7 @@ fun MonsterZone(
                 .padding(top = paddingValues.calculateTopPadding())
         ) {
             Monster(
-                idleUiState = monsterUiStage,
+                monsterUiState = monsterUiStage,
                 monsterViewModel = monsterViewModel,
                 modifier = Modifier
                     .fillMaxSize()
@@ -210,7 +210,7 @@ private fun LifeProgress(monsterUiState: MonsterUiStage, modifier: Modifier = Mo
 
 @Composable
 private fun Monster(
-    idleUiState: MonsterUiStage,
+    monsterUiState: MonsterUiStage,
     monsterViewModel: MonsterViewModel,
     modifier: Modifier,
 ) {
@@ -218,17 +218,17 @@ private fun Monster(
         modifier = modifier,
     ) {
         AnimatedVisibility(
-            visible = !idleUiState.monsterDead,
+            visible = !monsterUiState.monsterDead,
             enter = scaleIn(),
             exit = scaleOut(),
             modifier = Modifier.fillMaxSize()
         ) {
-            idleUiState.currentMonster?.let { painterResource(it.imageResId) }?.let {
+            monsterUiState.currentMonster?.let { painterResource(it.imageResId) }?.let {
                 Image(
                     painter = it,
                     contentScale = ContentScale.Fit,
                     contentDescription = null,
-                    colorFilter = if (idleUiState.tookDamage) ColorFilter.tint(Color.White)
+                    colorFilter = if (monsterUiState.tookDamage) ColorFilter.tint(Color.White)
                     else null,
                     modifier = Modifier
                         .clickable(
@@ -248,7 +248,7 @@ private fun Monster(
                 .padding(20.dp)
         ) {
             IconAndCount(
-                monsterUiStage = idleUiState.currentMonster?.rewardValue.toString(),
+                monsterUiStage = monsterUiState.currentMonster?.rewardValue.toString(),
                 horArrangement = Arrangement.Center,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_coin,
@@ -256,7 +256,7 @@ private fun Monster(
                 iconSize = 24,
                 modifier = Modifier
             )
-            idleUiState.currentMonster?.let {
+            monsterUiState.currentMonster?.let {
                 IconAndCount(
                     monsterUiStage = it.deathCount.toString(),
                     horArrangement = Arrangement.Center,
