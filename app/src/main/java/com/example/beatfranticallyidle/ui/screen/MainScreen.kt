@@ -35,11 +35,9 @@ fun MainScreen(
         modifier = modifier
     ) {
         MonsterZone(
-            rewardViewModel = rewardViewModel,
             rewardUiState = rewardUiState,
             monsterViewModel = monsterViewModel,
             monsterUiStage = idleUiState,
-            cardUiState = cardUiState,
             cardViewModel = cardViewModel,
             paddingValues = paddingValues,
             modifier = Modifier

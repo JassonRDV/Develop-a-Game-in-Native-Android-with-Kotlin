@@ -1,5 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local.monster
 
+import android.icu.math.BigDecimal
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -7,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.math.BigInteger
 
 @Dao
 interface MonsterDao {
@@ -15,7 +17,7 @@ interface MonsterDao {
     suspend fun insertAll(item: List<MonsterEntity>)
 
     @Query("UPDATE monsters SET deathCount = :deathCount WHERE name = :nameMonster")
-    suspend fun updateMonster(nameMonster: String, deathCount: Int)
+    suspend fun updateMonster(nameMonster: String, deathCount: BigInteger)
 
     @Query("SELECT * FROM monsters")
     fun getMonsters(): Flow<List<MonsterEntity>>

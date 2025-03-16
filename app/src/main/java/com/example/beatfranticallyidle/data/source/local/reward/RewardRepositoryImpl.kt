@@ -1,5 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local.reward
 
+import android.icu.math.BigDecimal
 import com.example.beatfranticallyidle.data.source.local.reward.model.Reward
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,4 +18,16 @@ class RewardRepositoryImpl @Inject constructor(
 
     override fun getRewards(): Flow<Reward> =
         rewardDao.getRewards().map { it.toReward() }
+
+    override suspend fun updatePurchaseCost() =
+        rewardDao.updatePurchaseCost()
+
+    override suspend fun updateGoldBut() =
+        rewardDao.updateGoldBut()
+
+    override suspend fun updateTotalDeath() =
+        rewardDao.updateTotalDeath()
+
+    override suspend fun updateGoldMonsterDeath(purchaseCost: BigDecimal) =
+        rewardDao.updateGoldMonsterDeath(purchaseCost)
 }

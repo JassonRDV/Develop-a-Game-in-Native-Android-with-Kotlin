@@ -1,5 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local.card
 
+import android.icu.math.BigDecimal
 import androidx.annotation.DrawableRes
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -12,6 +13,7 @@ import com.example.beatfranticallyidle.data.source.local.card.model.CardEffect
 import com.example.beatfranticallyidle.data.source.local.card.model.CardElement
 import com.example.beatfranticallyidle.data.source.local.card.model.CardType
 import com.example.beatfranticallyidle.data.source.local.card.model.CardWithCardType
+import java.math.BigInteger
 
 @Entity(tableName = "card_elements")
 data class CardTypeEntity(
@@ -47,7 +49,7 @@ data class CardEntity(
     val effectDescription: String,
     val discovered: Boolean,
     val effectActivated: Boolean,
-    val numberCardCount: Int,
+    val numberCardCount: BigInteger,
     val imageTypeResId: Int
 ) {
     fun toCard(): Card {

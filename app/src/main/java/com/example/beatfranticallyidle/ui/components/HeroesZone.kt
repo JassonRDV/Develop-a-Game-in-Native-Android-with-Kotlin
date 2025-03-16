@@ -39,6 +39,10 @@ fun HeroesZone(
     modifier: Modifier = Modifier,
 ) {
     val bottomPadding = paddingValues.calculateBottomPadding()
+    val cardList = currentCard.listCard ?: emptyList()
+    val card = List(6) { index ->
+        cardList.getOrNull(index) ?: genericHero
+    }
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
@@ -54,43 +58,16 @@ fun HeroesZone(
                 .fillMaxSize()
                 .padding(bottom = bottomPadding)
         ) {
-            Row(
-                modifier = Modifier.weight(1f)
-            ) {
-                UnitCard(
-                    modifier = modifier,
-                    currentCard = currentCard.listCard?.get(0) ?: genericHero,
-                    cardViewModel = cardViewModel,
-                )
-                UnitCard(
-                    modifier = modifier,
-                    currentCard = currentCard.listCard?.get(1) ?: genericHero,
-                    cardViewModel = cardViewModel,
-                )
-                UnitCard(
-                    modifier = modifier,
-                    currentCard = currentCard.listCard?.get(2) ?: genericHero,
-                    cardViewModel = cardViewModel,
-                )
-            }
-            Row(
-                modifier = Modifier.weight(1f)
-            ) {
-                UnitCard(
-                    modifier = modifier,
-                    currentCard = currentCard.listCard?.get(3) ?: genericHero,
-                    cardViewModel = cardViewModel,
-                )
-                UnitCard(
-                    modifier = modifier,
-                    currentCard = currentCard.listCard?.get(4) ?: genericHero,
-                    cardViewModel = cardViewModel,
-                )
-                UnitCard(
-                    modifier = modifier,
-                    currentCard = currentCard.listCard?.get(5) ?: genericHero,
-                    cardViewModel = cardViewModel,
-                )
+            card.chunked(3).forEach { rowCards ->
+                Row(modifier = Modifier.weight(1f)) {
+                    rowCards.forEach { card ->
+                        UnitCard(
+                            modifier = modifier,
+                            currentCard = card,
+                            cardViewModel = cardViewModel,
+                        )
+                    }
+                }
             }
         }
     }

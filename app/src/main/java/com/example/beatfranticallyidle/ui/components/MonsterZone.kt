@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -47,6 +46,7 @@ import com.example.beatfranticallyidle.viewmodel.MonsterUiStage
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 import com.example.beatfranticallyidle.viewmodel.RewardUiState
 import com.example.beatfranticallyidle.viewmodel.RewardViewModel
+import java.math.BigInteger
 
 @Composable
 fun MonsterZone(
@@ -55,9 +55,7 @@ fun MonsterZone(
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     cardViewModel: CardViewModel,
-    cardUiState: CardUiState,
     rewardUiState: RewardUiState,
-    rewardViewModel: RewardViewModel,
 ) {
     Box(
         modifier = modifier
@@ -83,7 +81,7 @@ fun MonsterZone(
                 modifier = Modifier
             ) {
                 IconAndCount(
-                    monsterUiStage = rewardUiState.gold.toString(),
+                    monsterUiStage = rewardUiState.reward?.gold.toString(),
                     horArrangement = Arrangement.Start,
                     verAlignment = Alignment.Bottom,
                     iconImage = R.drawable.icone_coin,
@@ -110,7 +108,7 @@ fun MonsterZone(
                             modifier = Modifier.background(Color(0x50000000))
                         )
                         IconAndCount(
-                            monsterUiStage = "100",
+                            monsterUiStage = rewardUiState.reward?.purchaseCost.toString(),
                             horArrangement = Arrangement.Start,
                             verAlignment = Alignment.Top,
                             iconImage = R.drawable.icone_coin,
@@ -122,7 +120,7 @@ fun MonsterZone(
                 }
             }
             IconAndCount(
-                monsterUiStage = rewardUiState.death.toString(),
+                monsterUiStage = rewardUiState.reward?.totalDeath.toString(),
                 horArrangement = Arrangement.End,
                 verAlignment = Alignment.Bottom,
                 iconImage = R.drawable.icone_caveira,
@@ -133,8 +131,6 @@ fun MonsterZone(
                     .padding(12.dp),
             )
             PreviousAndNextMonster(
-                rewardViewModel = rewardViewModel,
-                cardViewModel = cardViewModel,
                 monsterViewModel = monsterViewModel,
                 idleUiState = monsterUiStage,
                 modifier = Modifier
@@ -191,7 +187,7 @@ private fun LifeProgress(monsterUiState: MonsterUiStage, modifier: Modifier = Mo
         modifier = modifier
     ) {
         val progress = monsterUiState.currentMonster?.let {
-            (it.currentLife / it.maxLife)
+            (it.currentLife.divide(it.maxLife)).toFloat()
         } ?: 0f
         LinearProgressIndicator(
             progress = { progress },
@@ -316,22 +312,10 @@ private fun PreviousAndNextMonster(
     monsterViewModel: MonsterViewModel,
     modifier: Modifier = Modifier,
     idleUiState: MonsterUiStage,
-    cardViewModel: CardViewModel,
-    rewardViewModel: RewardViewModel,
 ) {
     Box(
         modifier = modifier
     ) {
-        Button(
-            onClick = {
-                monsterViewModel.insertAllMonsters()
-                cardViewModel.loadAllCards()
-                rewardViewModel.insertReward()
-            },
-            modifier = Modifier.align(alignment = Alignment.TopEnd)
-        ) {
-            Text(text = "Criar")
-        }
         AnimatedVisibility(
             visible = (idleUiState.currentMonsterIndex != 0),
             enter = scaleIn(),
@@ -353,11 +337,17 @@ private fun PreviousAndNextMonster(
         }
         AnimatedVisibility(
             visible = (
-                    (idleUiState.currentMonster?.deathCount ?: 0) > 0
+                    (idleUiState.currentMonster?.deathCount ?: BigInteger.ZERO)
+                            > BigInteger.ZERO
+                            && (idleUiState.monsterList.lastIndex
+                            != idleUiState.currentMonsterIndex)
                     ),
             enter = scaleIn(),
             exit = scaleOut(),
-            modifier = Modifier.align(alignment = Alignment.CenterEnd)
+            modifier = Modifier
+                .align(
+                    alignment = Alignment.CenterEnd
+                )
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowRight,

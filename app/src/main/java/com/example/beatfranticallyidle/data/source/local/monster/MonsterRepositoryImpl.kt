@@ -1,8 +1,10 @@
 package com.example.beatfranticallyidle.data.source.local.monster
 
+import android.icu.math.BigDecimal
 import com.example.beatfranticallyidle.data.source.local.monster.model.Monster
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.math.BigInteger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,14 +14,12 @@ class MonsterRepositoryImpl @Inject constructor(
 ) : MonsterRepository {
 
     override fun getMonsters(): Flow<List<Monster>> =
-        monsterDao.getMonsters().map { list ->
-            list.map { it.toMonster() }
-        }
+        monsterDao.getMonsters().map { list -> list.map { it.toMonster() } }
 
     override suspend fun insertAll(item: List<Monster>) =
         monsterDao.insertAll(item.map { it.toMonsterEntity() })
 
-    override suspend fun updateMonster(nameMonster: String, deathCount: Int) =
+    override suspend fun updateMonster(nameMonster: String, deathCount: BigInteger) =
         monsterDao.updateMonster(nameMonster, deathCount)
 
     override fun getMonsterById(id: Int): Flow<Monster?> =
