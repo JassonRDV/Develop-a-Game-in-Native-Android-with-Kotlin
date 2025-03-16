@@ -1,6 +1,9 @@
 package com.example.beatfranticallyidle.data.source.local.monster.model
 
+import android.icu.math.BigDecimal
 import androidx.annotation.DrawableRes
+import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
+import java.math.BigInteger
 
 enum class RewardType { GOLD, SOUL, NULL }
 
@@ -11,53 +14,46 @@ data class Monster(
     @DrawableRes val arenaResId: Int,
     val name: String,
     val description: String,
-    val maxLife: Float,
-    val currentLife: Float,
+    val maxLife: BigDecimal,
+    val currentLife: BigDecimal,
     val rewardType: RewardType,
-    val rewardValue: Float,
-    val deathCount: Int = 0,
+    val rewardValue: BigDecimal,
+    val deathCount: BigInteger = BigInteger.ZERO,
 ) {
-
-    fun takeDamage(damage: Float): Monster {
-
-        var newCurrentLife = currentLife - damage
-        if (newCurrentLife < 0) {
-            newCurrentLife = 0f
+    fun takeDamage(damage: BigDecimal): Monster {
+        var newCurrentLife = currentLife.subtract(damage)
+        if (newCurrentLife < BigDecimal(0)) {
+            newCurrentLife = BigDecimal(0)
         }
         return copy(currentLife = newCurrentLife)
     }
 
     fun isAlive(): Boolean {
-
-        return currentLife > 0
+        return currentLife > BigDecimal(0)
     }
 
-    private fun resetLife(): Float {
-
+    private fun resetLife(): BigDecimal {
         val life = maxLife
         return life
     }
 
-    private fun increaseMaxLife(): Float {
-
-        val newMaxLife = maxLife * 1.2f
+    private fun increaseMaxLife(): BigDecimal {
+        val newMaxLife = maxLife.multiply(BigDecimal(1.2))
         return newMaxLife
     }
 
-    private fun increaseRewardValue(increase: Float): Float {
+    private fun increaseRewardValue(increase: BigDecimal): BigDecimal {
 
-        val valor = rewardValue * increase
+        val valor = rewardValue.multiply(increase)
         return valor
     }
 
-    private fun increaseDeathCount(): Int {
-
-        val newDeathCount = deathCount + 1
+    private fun increaseDeathCount(): BigInteger {
+        val newDeathCount = deathCount.add(BigInteger.ONE)
         return newDeathCount
     }
 
     fun die(): Monster {
-
         val newMaxLife = increaseMaxLife()
         val newDeathCount = increaseDeathCount()
         val newCurrentLife = resetLife()
@@ -65,6 +61,22 @@ data class Monster(
             maxLife = newMaxLife,
             deathCount = newDeathCount,
             currentLife = newCurrentLife,
+        )
+    }
+
+    fun toMonsterEntity(): MonsterEntity {
+        return MonsterEntity(
+            id = id,
+            imageResId = imageResId,
+            iconResId = iconResId,
+            arenaResId = arenaResId,
+            name = name,
+            description = description,
+            maxLife = maxLife,
+            currentLife = currentLife,
+            rewardType = rewardType,
+            rewardValue = rewardValue,
+            deathCount = deathCount,
         )
     }
 }

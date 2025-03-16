@@ -11,47 +11,46 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RewardViewModel @Inject constructor(
-    private val rewardRepository: RewardRepository,
-    private val monsterRepository: MonsterRepository
+    private val rewardRepository: RewardRepository, private val monsterRepository: MonsterRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RewardUiState())
     val uiState: StateFlow<RewardUiState> = _uiState.asStateFlow()
 
     init {
+        loadReward()
+    }
+
+    private fun loadReward() {
         viewModelScope.launch {
-            rewardRepository.getRewards()
-                .combine(monsterRepository.getMonsters()) { reward, monsters ->
-                    RewardUiState(
-                        reward = reward,
-                        gold = reward.gold,
-                        death = monsters.sumOf { it.deathCount }
-                    )
-                }.collectLatest { result ->
+            try {
+                rewardRepository.getRewards().collectLatest { result ->
                     _uiState.update { currentStage ->
                         currentStage.copy(
                             isLoading = false,
-                            reward = result.reward,
-                            gold = result.gold,
-                            death = result.death
+                            reward = result
                         )
                     }
                 }
+            } catch (e: Exception) {
+                insertReward()
+            }
         }
     }
 
-    fun insertReward(rewardi: Reward = reward) {
+    private fun insertReward(rewardi: Reward = reward) {
         viewModelScope.launch {
             val reward = _uiState.value.reward
-            if (reward == null)
+            if (reward == null) {
                 rewardRepository.insertReward(rewardi)
+                loadReward()
+            }
         }
     }
 }
@@ -59,6 +58,4 @@ class RewardViewModel @Inject constructor(
 data class RewardUiState(
     val isLoading: Boolean = true,
     val reward: Reward? = null,
-    val gold: Float? = null,
-    val death: Int? = null,
 )

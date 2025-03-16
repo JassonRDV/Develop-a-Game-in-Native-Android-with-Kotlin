@@ -1,9 +1,11 @@
 package com.example.beatfranticallyidle.data.source.local.card.model
 
+import android.icu.math.BigDecimal
 import androidx.annotation.DrawableRes
 import com.example.beatfranticallyidle.data.source.local.card.CardEntity
 import com.example.beatfranticallyidle.data.source.local.card.CardTypeEntity
 import com.example.beatfranticallyidle.data.source.local.card.CardWithCardTypeEntity
+import java.math.BigInteger
 
 enum class CardElement(val value: Int) {
     FIRE(0),
@@ -38,12 +40,12 @@ data class Card(
     @DrawableRes val imageTypeResId: Int,
     val id: Int = 0,
     val name: String,
-    val cardElementId: Int, // id do elemento da carta
-    val effect: CardEffect, // tipo de efeito da carta
-    val effectDescription: String, // descrição do efeito
-    val discovered: Boolean, // carta descoberta ou não
-    val effectActivated: Boolean, // efeito ativado ou não
-    val numberCardCount: Int, // cartas repetidas
+    val cardElementId: Int,
+    val effect: CardEffect,
+    val effectDescription: String,
+    val discovered: Boolean,
+    val effectActivated: Boolean,
+    val numberCardCount: BigInteger,
 ) {
     fun applyEffect() {
 
@@ -58,7 +60,7 @@ data class Card(
     }
 
     fun numberCardCount() : Card {
-        val newCount = numberCardCount + 1
+        val newCount = numberCardCount.add(BigInteger.ONE)
         return copy(numberCardCount = newCount)
     }
 

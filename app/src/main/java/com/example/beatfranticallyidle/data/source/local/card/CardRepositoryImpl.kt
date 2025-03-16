@@ -33,4 +33,10 @@ class CardRepositoryImpl @Inject constructor(
         cardDao.getAllCardsWithCardType().map { cardWithCardTypeEntities ->
             cardWithCardTypeEntities.map { it.toCardWithCardType() }
         }
+
+    override suspend fun updateCard(
+        id: Int,
+        discovered: Boolean,
+        effectActivated: Boolean,
+    ) = cardDao.updateCard(id, discovered, effectActivated)
 }

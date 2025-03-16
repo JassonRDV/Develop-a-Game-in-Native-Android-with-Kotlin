@@ -1,10 +1,12 @@
 package com.example.beatfranticallyidle.viewmodel
 
+import android.icu.math.BigDecimal
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterRepository
 import com.example.beatfranticallyidle.data.source.local.monster.listMonsterEntity
 import com.example.beatfranticallyidle.data.source.local.monster.model.Monster
+import com.example.beatfranticallyidle.data.source.local.reward.RewardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MonsterViewModel @Inject constructor(
-    private val monsterRepository: MonsterRepository
+    private val monsterRepository: MonsterRepository,
+    private val rewardRepository: RewardRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MonsterUiStage())
@@ -37,24 +40,19 @@ class MonsterViewModel @Inject constructor(
         }
         viewModelScope.launch {
             try {
-                monsterRepository.getMonsters().collectLatest { monsterList ->
+                monsterRepository.getMonsters().collectLatest { monster ->
                     _uiState.update { currentState ->
                         currentState.copy(
-                            monsterList = monsterList,
-                            currentMonster = monsterList[currentState.currentMonsterIndex ?: 0],
-                            currentMonsterIndex = 0,
+                            monsterList = monster,
+                            currentMonster = monster[currentState.currentMonsterIndex ?: 0],
+                            currentMonsterIndex = currentState.currentMonsterIndex ?: 0,
                             isLoading = false,
                             errorMonster = null
                         )
                     }
                 }
             } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMonster = "Error loading monsters: ${e.message}"
-                    )
-                }
+                insertAllMonsters()
             }
         }
     }
@@ -96,7 +94,7 @@ class MonsterViewModel @Inject constructor(
                     _uiState.update { currentState ->
                         currentState.copy(
                             tookDamage = true,
-                            currentMonster = currentMonster.takeDamage(1f)
+                            currentMonster = currentMonster.takeDamage(BigDecimal(1))
                         )
                     }
                     delay(50)
@@ -131,6 +129,7 @@ class MonsterViewModel @Inject constructor(
                     )
                 }
                 updateMonsterSQLite()
+                updateRewardSQLite()
             }
         }
     }
@@ -146,11 +145,21 @@ class MonsterViewModel @Inject constructor(
         }
     }
 
-    fun insertAllMonsters(allMonsters: List<Monster> = listMonsterEntity) {
+    private fun updateRewardSQLite() {
+        viewModelScope.launch {
+            _uiState.value.currentMonster?.let {
+                rewardRepository.updateTotalDeath()
+                rewardRepository.updateGoldMonsterDeath(it.rewardValue)
+            }
+        }
+    }
+
+    private fun insertAllMonsters(allMonsters: List<Monster> = listMonsterEntity) {
         viewModelScope.launch {
             val monsterList = monsterRepository.getMonsters().firstOrNull()
             if (monsterList.isNullOrEmpty()) {
                 monsterRepository.insertAll(allMonsters)
+                loadMonster()
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local
 
+import android.icu.math.BigDecimal
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -13,6 +14,7 @@ import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.data.source.local.monster.model.RewardType
 import com.example.beatfranticallyidle.data.source.local.reward.RewardDao
 import com.example.beatfranticallyidle.data.source.local.reward.RewardEntity
+import java.math.BigInteger
 
 @Database(
     entities = [
@@ -32,7 +34,6 @@ abstract class AppDatabase : RoomDatabase() {
 }
 
 class Converters {
-
     @androidx.room.TypeConverter
     fun fromRewardType(value: RewardType): String {
         return value.name
@@ -61,5 +62,25 @@ class Converters {
     @androidx.room.TypeConverter
     fun toCardEffect(value: String): CardEffect {
         return enumValueOf(value)
+    }
+
+    @androidx.room.TypeConverter
+    fun fromBigDecimal(value: BigDecimal): String {
+        return value.toString()
+    }
+
+    @androidx.room.TypeConverter
+    fun toBigDecimal(value: String): BigDecimal {
+        return BigDecimal(value)
+    }
+
+    @androidx.room.TypeConverter
+    fun fromBigInteger(value: BigInteger): String {
+        return value.toString()
+    }
+
+    @androidx.room.TypeConverter
+    fun toBigInteger(value: String): BigInteger {
+        return BigInteger(value)
     }
 }

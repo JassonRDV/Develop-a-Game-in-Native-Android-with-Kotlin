@@ -15,6 +15,15 @@ interface CardDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllCards(cards: List<CardEntity>)
 
+    @Query(
+        "UPDATE cards " +
+                "SET discovered = :discovered, " +
+                "effectActivated = :effectActivated," +
+                "numberCardCount = numberCardCount + 1 " +
+                "WHERE id = :id"
+    )
+    suspend fun updateCard(id: Int, discovered: Boolean, effectActivated: Boolean)
+
     @Query("SELECT * FROM card_elements")
     fun getAllCardTypes(): Flow<List<CardTypeEntity>>
 
