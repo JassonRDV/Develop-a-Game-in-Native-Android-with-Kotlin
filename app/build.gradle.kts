@@ -79,6 +79,8 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    implementation(libs.exoplayer)
+
     // Testing (JUnit)
     testImplementation(libs.junit)
 

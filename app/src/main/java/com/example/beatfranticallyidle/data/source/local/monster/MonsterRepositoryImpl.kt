@@ -1,6 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local.monster
 
-import android.icu.math.BigDecimal
+import java.math.BigDecimal
 import com.example.beatfranticallyidle.data.source.local.monster.model.Monster
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

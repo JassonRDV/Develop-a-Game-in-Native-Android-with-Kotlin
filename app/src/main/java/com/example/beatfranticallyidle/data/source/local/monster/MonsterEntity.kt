@@ -1,12 +1,12 @@
 package com.example.beatfranticallyidle.data.source.local.monster
 
-import android.icu.math.BigDecimal
 import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.data.source.local.monster.model.Monster
 import com.example.beatfranticallyidle.data.source.local.monster.model.RewardType
+import java.math.BigDecimal
 import java.math.BigInteger
 
 @Entity(tableName = "monsters")

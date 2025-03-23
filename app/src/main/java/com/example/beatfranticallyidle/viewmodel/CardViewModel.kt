@@ -1,6 +1,5 @@
 package com.example.beatfranticallyidle.viewmodel
 
-import android.icu.math.BigDecimal
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beatfranticallyidle.data.source.local.card.CardRepository
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel

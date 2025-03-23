@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BeatFranticallyIdleTheme {
-                AppIdle(modifier = Modifier)
+                AppIdle()
             }
         }
     }

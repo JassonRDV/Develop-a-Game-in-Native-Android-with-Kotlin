@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.0"
+exoplayer = "2.19.1"
 hilt = "2.53.1"
 kotlin = "2.1.10"
 coreKtx = "1.15.0"
@@ -8,9 +9,9 @@ junitExt = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.02.00"
+composeBom = "2025.03.00"
 multidexVersion = "2.0.1"
-navigationCompose = "2.8.8"
+navigationCompose = "2.8.9"
 room = "2.6.1"
 kps = "2.1.10-1.0.29"
 
@@ -23,6 +24,7 @@ androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "mult
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

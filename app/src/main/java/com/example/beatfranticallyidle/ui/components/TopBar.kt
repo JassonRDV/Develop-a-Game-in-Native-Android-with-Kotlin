@@ -1,7 +1,6 @@
-package com.example.beatfranticallyidle.ui.components.mainscreen
+package com.example.beatfranticallyidle.ui.components
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text

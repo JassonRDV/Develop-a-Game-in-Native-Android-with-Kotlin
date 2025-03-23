@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,19 +29,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.beatfranticallyidle.ui.components.mainscreen.BottomBar
-import com.example.beatfranticallyidle.ui.components.mainscreen.TopBar
-import com.example.beatfranticallyidle.ui.screen.MainScreen
+import com.example.beatfranticallyidle.ui.components.BottomBar
+import com.example.beatfranticallyidle.ui.components.TopBar
+import com.example.beatfranticallyidle.ui.screen.game.mainscreen.MainScreen
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 import com.example.beatfranticallyidle.viewmodel.RewardViewModel
+import com.example.beatfranticallyidle.viewmodel.SoundsViewModel
 
 sealed class HeroCardRoute(val route: String) {
-    object FireHero : HeroCardRoute("FireHero")
-    object LightningHero : HeroCardRoute("LightningHero")
-    object PoisonHero : HeroCardRoute("PoisonHero")
+    data object FireHero : HeroCardRoute("FireHero")
+    data object LightningHero : HeroCardRoute("LightningHero")
+    data object PoisonHero : HeroCardRoute("PoisonHero")
 }
 
 @Composable
@@ -48,16 +50,23 @@ fun AppIdle(
     monsterViewModel: MonsterViewModel = viewModel(),
     cardViewModel: CardViewModel = viewModel(),
     rewardViewModel: RewardViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    soundsViewModel: SoundsViewModel = viewModel()
 ) {
-    val idleUiState by monsterViewModel.uiState.collectAsState()
+    val monsterUiState by monsterViewModel.uiState.collectAsState()
     val cardUiState by cardViewModel.uiState.collectAsState()
     val rewardUiState by rewardViewModel.uiState.collectAsState()
+
+    val clickSound = R.raw.click_01
+    val clickSoundId = 1
+
+    LaunchedEffect(key1 = true) {
+        soundsViewModel.playBackgroundSound(R.raw.background_music_01)
+        soundsViewModel.loadSoundEffect(clickSound, clickSoundId)
+    }
 
     val navController = rememberNavController()
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
     ) {
         Scaffold(
             topBar = {
@@ -79,14 +88,14 @@ fun AppIdle(
             modifier = Modifier
         ) { paddingValues ->
             MainScreen(
-                rewardViewModel = rewardViewModel,
                 rewardUiState = rewardUiState,
                 cardViewModel = cardViewModel,
                 cardUiState = cardUiState,
                 monsterViewModel = monsterViewModel,
-                idleUiState = idleUiState,
+                monsterUiState = monsterUiState,
                 navController = navController,
                 paddingValues = paddingValues,
+                soundsViewModel = soundsViewModel,
                 modifier = Modifier,
             )
         }
@@ -95,6 +104,7 @@ fun AppIdle(
             modifier = Modifier.fillMaxSize()
         ) {
             HeroCardFullScreen(
+                soundsViewModel = soundsViewModel,
                 cardUiState = cardUiState,
                 cardViewModel = cardViewModel,
                 modifier = Modifier.padding(48.dp)
@@ -107,7 +117,8 @@ fun AppIdle(
 fun HeroCardFullScreen(
     modifier: Modifier,
     cardUiState: CardUiState,
-    cardViewModel: CardViewModel
+    cardViewModel: CardViewModel,
+    soundsViewModel: SoundsViewModel
 ) {
     Box(
         modifier = modifier
@@ -115,6 +126,7 @@ fun HeroCardFullScreen(
                 role = Role.Image,
                 onClick = {
                     cardViewModel.hideCardFullScreen()
+                    soundsViewModel.playSoundEffect(1)
                 },
             )
             .padding(8.dp)

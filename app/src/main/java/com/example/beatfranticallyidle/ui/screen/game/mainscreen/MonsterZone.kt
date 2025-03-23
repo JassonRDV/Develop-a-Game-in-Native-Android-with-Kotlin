@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.ui.components
+package com.example.beatfranticallyidle.ui.screen.game.mainscreen
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
@@ -40,13 +40,14 @@ import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.CardUiState
+import com.example.beatfranticallyidle.utils.numberformatter.formatBigDecimalNumber
+import com.example.beatfranticallyidle.utils.numberformatter.formatBigIntegerNumber
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
 import com.example.beatfranticallyidle.viewmodel.MonsterUiStage
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 import com.example.beatfranticallyidle.viewmodel.RewardUiState
-import com.example.beatfranticallyidle.viewmodel.RewardViewModel
 import java.math.BigInteger
+import java.math.RoundingMode
 
 @Composable
 fun MonsterZone(
@@ -80,17 +81,19 @@ fun MonsterZone(
                 contentAlignment = Alignment.BottomStart,
                 modifier = Modifier
             ) {
-                IconAndCount(
-                    monsterUiStage = rewardUiState.reward?.gold.toString(),
-                    horArrangement = Arrangement.Start,
-                    verAlignment = Alignment.Bottom,
-                    iconImage = R.drawable.icone_coin,
-                    fontSize = 24,
-                    iconSize = 24,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(12.dp),
-                )
+                rewardUiState.reward?.gold?.let { formatBigDecimalNumber(it) }?.let {
+                    IconAndCount(
+                        monsterUiStage = it,
+                        horArrangement = Arrangement.Start,
+                        verAlignment = Alignment.Bottom,
+                        iconImage = R.drawable.icone_coin,
+                        fontSize = 24,
+                        iconSize = 24,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(12.dp),
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .align(alignment = Alignment.BottomCenter)
@@ -107,29 +110,35 @@ fun MonsterZone(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.background(Color(0x50000000))
                         )
-                        IconAndCount(
-                            monsterUiStage = rewardUiState.reward?.purchaseCost.toString(),
-                            horArrangement = Arrangement.Start,
-                            verAlignment = Alignment.Top,
-                            iconImage = R.drawable.icone_coin,
-                            fontSize = 20,
-                            iconSize = 20,
-                            modifier = Modifier,
-                        )
+                        rewardUiState.reward?.purchaseCost?.let { formatBigDecimalNumber(it) }
+                            ?.let {
+                                IconAndCount(
+                                    monsterUiStage = it,
+                                    horArrangement = Arrangement.Start,
+                                    verAlignment = Alignment.Top,
+                                    iconImage = R.drawable.icone_coin,
+                                    fontSize = 20,
+                                    iconSize = 20,
+                                    modifier = Modifier,
+
+                                    )
+                            }
                     }
                 }
             }
-            IconAndCount(
-                monsterUiStage = rewardUiState.reward?.totalDeath.toString(),
-                horArrangement = Arrangement.End,
-                verAlignment = Alignment.Bottom,
-                iconImage = R.drawable.icone_caveira,
-                fontSize = 24,
-                iconSize = 24,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
-            )
+            rewardUiState.reward?.totalDeath?.let { formatBigIntegerNumber(it) }?.let {
+                IconAndCount(
+                    monsterUiStage = it,
+                    horArrangement = Arrangement.End,
+                    verAlignment = Alignment.Bottom,
+                    iconImage = R.drawable.icone_caveira,
+                    fontSize = 24,
+                    iconSize = 24,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
+                )
+            }
             PreviousAndNextMonster(
                 monsterViewModel = monsterViewModel,
                 idleUiState = monsterUiStage,
@@ -187,7 +196,11 @@ private fun LifeProgress(monsterUiState: MonsterUiStage, modifier: Modifier = Mo
         modifier = modifier
     ) {
         val progress = monsterUiState.currentMonster?.let {
-            (it.currentLife.divide(it.maxLife)).toFloat()
+            (it.currentLife.divide(
+                (it.maxLife),
+                3,
+                RoundingMode.HALF_UP
+            )).toFloat()
         } ?: 0f
         LinearProgressIndicator(
             progress = { progress },

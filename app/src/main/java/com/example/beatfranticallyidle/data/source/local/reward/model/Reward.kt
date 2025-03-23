@@ -1,7 +1,7 @@
 package com.example.beatfranticallyidle.data.source.local.reward.model
 
-import android.icu.math.BigDecimal
 import com.example.beatfranticallyidle.data.source.local.reward.RewardEntity
+import java.math.BigDecimal
 import java.math.BigInteger
 
 data class Reward(

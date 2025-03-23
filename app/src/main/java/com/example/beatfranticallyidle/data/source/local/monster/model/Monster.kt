@@ -1,8 +1,8 @@
 package com.example.beatfranticallyidle.data.source.local.monster.model
 
-import android.icu.math.BigDecimal
 import androidx.annotation.DrawableRes
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
+import java.math.BigDecimal
 import java.math.BigInteger
 
 enum class RewardType { GOLD, SOUL, NULL }

@@ -1,6 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local.card.model
 
-import android.icu.math.BigDecimal
+import java.math.BigDecimal
 import androidx.annotation.DrawableRes
 import com.example.beatfranticallyidle.data.source.local.card.CardEntity
 import com.example.beatfranticallyidle.data.source.local.card.CardTypeEntity

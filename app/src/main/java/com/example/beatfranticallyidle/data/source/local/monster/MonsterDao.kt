@@ -1,6 +1,6 @@
 package com.example.beatfranticallyidle.data.source.local.monster
 
-import android.icu.math.BigDecimal
+import java.math.BigDecimal
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert

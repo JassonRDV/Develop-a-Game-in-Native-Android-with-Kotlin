@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.ui.screen
+package com.example.beatfranticallyidle.ui.screen.game.mainscreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,26 +10,25 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.beatfranticallyidle.HeroCardRoute
 import com.example.beatfranticallyidle.R
-import com.example.beatfranticallyidle.ui.components.HeroesZone
-import com.example.beatfranticallyidle.ui.components.MonsterZone
 import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
 import com.example.beatfranticallyidle.viewmodel.MonsterUiStage
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 import com.example.beatfranticallyidle.viewmodel.RewardUiState
-import com.example.beatfranticallyidle.viewmodel.RewardViewModel
+import com.example.beatfranticallyidle.viewmodel.SoundsViewModel
+
 
 @Composable
 fun MainScreen(
     monsterViewModel: MonsterViewModel,
-    idleUiState: MonsterUiStage,
+    monsterUiState: MonsterUiStage,
     navController: NavHostController,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     cardUiState: CardUiState,
     cardViewModel: CardViewModel,
     rewardUiState: RewardUiState,
-    rewardViewModel: RewardViewModel,
+    soundsViewModel: SoundsViewModel,
 ) {
     Column(
         modifier = modifier
@@ -37,7 +36,7 @@ fun MainScreen(
         MonsterZone(
             rewardUiState = rewardUiState,
             monsterViewModel = monsterViewModel,
-            monsterUiStage = idleUiState,
+            monsterUiStage = monsterUiState,
             cardViewModel = cardViewModel,
             paddingValues = paddingValues,
             modifier = Modifier
@@ -51,9 +50,10 @@ fun MainScreen(
         ) {
             composable(route = HeroCardRoute.FireHero.route) {
                 HeroesZone(
+                    background = R.drawable.background_sol_pondo,
+                    soundsViewModel = soundsViewModel,
                     cardViewModel = cardViewModel,
                     currentCard = cardUiState,
-                    background = R.drawable.background_sol_pondo,
                     paddingValues = paddingValues,
                     modifier = Modifier
                         .fillMaxSize()
@@ -62,10 +62,11 @@ fun MainScreen(
             }
             composable(route = HeroCardRoute.PoisonHero.route) {
                 HeroesZone(
-                    cardViewModel = cardViewModel,
-                    currentCard = cardUiState,
                     background = R.drawable.background_toxic,
                     paddingValues = paddingValues,
+                    cardViewModel = cardViewModel,
+                    currentCard = cardUiState,
+                    soundsViewModel = soundsViewModel,
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
@@ -73,10 +74,11 @@ fun MainScreen(
             }
             composable(route = HeroCardRoute.LightningHero.route) {
                 HeroesZone(
-                    cardViewModel = cardViewModel,
-                    currentCard = cardUiState,
                     background = R.drawable.background_black_hole,
                     paddingValues = paddingValues,
+                    cardViewModel = cardViewModel,
+                    currentCard = cardUiState,
+                    soundsViewModel = soundsViewModel,
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),

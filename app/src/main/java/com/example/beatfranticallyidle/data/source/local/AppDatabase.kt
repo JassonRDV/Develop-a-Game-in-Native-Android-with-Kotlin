@@ -1,6 +1,5 @@
 package com.example.beatfranticallyidle.data.source.local
 
-import android.icu.math.BigDecimal
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -14,6 +13,7 @@ import com.example.beatfranticallyidle.data.source.local.monster.MonsterEntity
 import com.example.beatfranticallyidle.data.source.local.monster.model.RewardType
 import com.example.beatfranticallyidle.data.source.local.reward.RewardDao
 import com.example.beatfranticallyidle.data.source.local.reward.RewardEntity
+import java.math.BigDecimal
 import java.math.BigInteger
 
 @Database(

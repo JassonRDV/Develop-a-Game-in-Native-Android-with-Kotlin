@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.ui.components
+package com.example.beatfranticallyidle.ui.screen.game.mainscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +29,7 @@ import com.example.beatfranticallyidle.data.source.local.card.model.Card
 import com.example.beatfranticallyidle.data.source.local.card.model.genericHero
 import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
+import com.example.beatfranticallyidle.viewmodel.SoundsViewModel
 
 @Composable
 fun HeroesZone(
@@ -37,6 +38,7 @@ fun HeroesZone(
     cardViewModel: CardViewModel,
     currentCard: CardUiState,
     modifier: Modifier = Modifier,
+    soundsViewModel: SoundsViewModel,
 ) {
     val bottomPadding = paddingValues.calculateBottomPadding()
     val cardList = currentCard.listCard ?: emptyList()
@@ -62,6 +64,7 @@ fun HeroesZone(
                 Row(modifier = Modifier.weight(1f)) {
                     rowCards.forEach { card ->
                         UnitCard(
+                            soundsViewModel = soundsViewModel,
                             modifier = modifier,
                             currentCard = card,
                             cardViewModel = cardViewModel,
@@ -78,9 +81,11 @@ fun UnitCard(
     currentCard: Card,
     cardViewModel: CardViewModel,
     modifier: Modifier = Modifier,
+    soundsViewModel: SoundsViewModel,
 ) {
     when(currentCard.discovered) {
         true -> HeroRevealed(
+            soundsViewModel = soundsViewModel,
             cardViewModel = cardViewModel,
             currentHero = currentCard,
             modifier = modifier.fillMaxSize(),
@@ -97,6 +102,7 @@ private fun HeroRevealed(
     currentHero: Card,
     cardViewModel: CardViewModel,
     modifier: Modifier = Modifier,
+    soundsViewModel: SoundsViewModel,
 ) {
     Box(
         modifier = modifier
@@ -104,7 +110,10 @@ private fun HeroRevealed(
             .fillMaxSize()
             .clickable(
                 role = Role.Image,
-                onClick = { cardViewModel.showingCardFullScreen(currentHero) },
+                onClick = {
+                    cardViewModel.showingCardFullScreen(currentHero)
+                    soundsViewModel.playSoundEffect(1)
+                },
             ),
         contentAlignment = Alignment.Center
     ) {

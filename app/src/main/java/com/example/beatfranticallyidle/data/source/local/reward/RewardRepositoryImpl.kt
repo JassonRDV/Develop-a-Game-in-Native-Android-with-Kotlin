@@ -1,9 +1,9 @@
 package com.example.beatfranticallyidle.data.source.local.reward
 
-import android.icu.math.BigDecimal
 import com.example.beatfranticallyidle.data.source.local.reward.model.Reward
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class RewardRepositoryImpl @Inject constructor(

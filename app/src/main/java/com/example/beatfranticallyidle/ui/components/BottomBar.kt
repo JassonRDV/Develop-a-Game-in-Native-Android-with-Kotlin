@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.ui.components.mainscreen
+package com.example.beatfranticallyidle.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
