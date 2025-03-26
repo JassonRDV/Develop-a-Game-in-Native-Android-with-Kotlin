@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.ui.screen.game.mainscreen
+package com.example.beatfranticallyidle.ui.screen.game.mainscreen.zone
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility

@@ -10,13 +10,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.beatfranticallyidle.HeroCardRoute
 import com.example.beatfranticallyidle.R
+import com.example.beatfranticallyidle.ui.components.pixelart.AnimatedPixelArt
+import com.example.beatfranticallyidle.ui.screen.game.mainscreen.zone.HeroesZone
+import com.example.beatfranticallyidle.ui.screen.game.mainscreen.zone.MonsterZone
 import com.example.beatfranticallyidle.viewmodel.CardUiState
 import com.example.beatfranticallyidle.viewmodel.CardViewModel
 import com.example.beatfranticallyidle.viewmodel.MonsterUiStage
 import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
 import com.example.beatfranticallyidle.viewmodel.RewardUiState
 import com.example.beatfranticallyidle.viewmodel.SoundsViewModel
-
 
 @Composable
 fun MainScreen(

@@ -1,4 +1,4 @@
-package com.example.beatfranticallyidle.ui.screen.game.mainscreen
+package com.example.beatfranticallyidle.ui.screen.game.mainscreen.zone
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
