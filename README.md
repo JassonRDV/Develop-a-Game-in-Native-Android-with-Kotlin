@@ -1,7 +1,12 @@
-![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/1.png)
-![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/2.png)
-![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/3.png)
-![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/4.png)
+<table>
+  <tr>
+    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/1.png" width="200"></td>
+    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/2.png" width="200"></td>
+    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/3.png" width="200"></td>
+    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/4.png" width="200"></td>
+  </tr>
+</table>
+
 ---
 
 # Develop a Game in Native Android with Kotlin  
