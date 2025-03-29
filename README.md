@@ -1,3 +1,7 @@
+![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/1.png)
+![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/2.png)
+![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/3.png)
+![Captura de tela do jogo](https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/4.png)
 ---
 
 # Develop a Game in Native Android with Kotlin  
@@ -27,21 +31,3 @@ The goal is to defeat monsters, collect rewards, and progress through the game. 
 - **Architecture**: MVVM  
 - **Testing**: Not yet implemented  
 
----
-
-## 🧑‍💻 **Contributions**  
-
-- At the moment, the project is not ready for contributions.  
- I am learning as I code, so the current codebase is quite messy.  
- I am constantly improving and solving issues, but if you enjoy challenges, feel free to get in touch. 😊  
-
----
-
-## 🪁 **Plans**  
-
-- I plan to incorporate the latest advancements in Android development with Kotlin.
-  Add data persistence and save player gameplay on Firebase. Currently,
-  the game uses AI-generated images that mimic pixel art. However, for the final project,
-  I will create the 2D artwork myself, as I am also a **2D and 3D artist**.  
-
----
