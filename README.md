@@ -1,4 +1,4 @@
-<table style = "border-collapse: collapse;">
+<table align = "center" style = "border-collapse: collapse;">
   <tr>
     <td style = "border: none;"><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/1.png" width="200"></td>
     <td style = "border: none;"><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/2.png" width="200"></td>
