@@ -3,7 +3,7 @@ package com.example.beatfranticallyidle.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.beatfranticallyidle.data.source.local.monster.MonsterRepository
-import com.example.beatfranticallyidle.data.source.local.monster.listMonsterEntity
+import com.example.beatfranticallyidle.data.source.local.monster.model.listMonsterEntity
 import com.example.beatfranticallyidle.data.source.local.monster.model.Monster
 import com.example.beatfranticallyidle.data.source.local.reward.RewardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

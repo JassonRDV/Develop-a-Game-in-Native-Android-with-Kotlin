@@ -111,7 +111,7 @@ private fun HeroRevealed(
             .clickable(
                 role = Role.Image,
                 onClick = {
-                    cardViewModel.showingCardFullScreen(currentHero)
+                    cardViewModel.showCardFullScreen(currentHero)
                     soundsViewModel.playSoundEffect(1)
                 },
             ),

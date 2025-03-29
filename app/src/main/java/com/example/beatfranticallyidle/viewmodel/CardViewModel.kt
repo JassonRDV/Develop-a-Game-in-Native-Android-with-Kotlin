@@ -62,7 +62,7 @@ class CardViewModel @Inject constructor(
         }
     }
 
-    fun bottomBarTypeHero(currentList: Int) {
+    fun updateCardListForType(currentList: Int) {
         _uiState.update { currentState ->
             currentState.copy(
                 listCard = currentState.cardWithCardTypeEntity?.get(currentList)?.cards
@@ -70,7 +70,7 @@ class CardViewModel @Inject constructor(
         }
     }
 
-    fun showingCardFullScreen(selectedHero: Card) {
+    fun showCardFullScreen(selectedHero: Card) {
         _uiState.update { currentState ->
             currentState.copy(
                 currentCard = currentState.listCard?.get(selectedHero.id - 1),

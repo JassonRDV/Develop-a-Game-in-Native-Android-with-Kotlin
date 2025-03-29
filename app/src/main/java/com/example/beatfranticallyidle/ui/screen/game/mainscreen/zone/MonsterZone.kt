@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.beatfranticallyidle.AppIdle
 import com.example.beatfranticallyidle.R
+import com.example.beatfranticallyidle.ui.components.pixelart.AnimatedPixelArt
 import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
 import com.example.beatfranticallyidle.utils.numberformatter.formatBigDecimalNumber
 import com.example.beatfranticallyidle.utils.numberformatter.formatBigIntegerNumber
@@ -182,25 +182,24 @@ private fun Background(
     idleUiState.currentMonster?.let { painterResource(it.arenaResId) }?.let {
         Image(
             painter = it,
-        contentScale = ContentScale.FillHeight,
-        contentDescription = null,
-        modifier = modifier
-    )
+            contentScale = ContentScale.FillHeight,
+            contentDescription = null,
+            modifier = modifier
+        )
     }
 }
 
 @Composable
-private fun LifeProgress(monsterUiState: MonsterUiStage, modifier: Modifier = Modifier) {
+private fun LifeProgress(
+    monsterUiState: MonsterUiStage,
+    modifier: Modifier = Modifier
+) {
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
     ) {
         val progress = monsterUiState.currentMonster?.let {
-            (it.currentLife.divide(
-                (it.maxLife),
-                3,
-                RoundingMode.HALF_UP
-            )).toFloat()
+            (it.currentLife.divide((it.maxLife), 3, RoundingMode.HALF_UP)).toFloat()
         } ?: 0f
         LinearProgressIndicator(
             progress = { progress },
@@ -232,14 +231,16 @@ private fun Monster(
             exit = scaleOut(),
             modifier = Modifier.fillMaxSize()
         ) {
-            monsterUiState.currentMonster?.let { painterResource(it.imageResId) }?.let {
-                Image(
-                    painter = it,
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    colorFilter = if (monsterUiState.tookDamage) ColorFilter.tint(Color.White)
-                    else null,
-                    modifier = Modifier
+            monsterUiState.currentMonster?.let {
+                AnimatedPixelArt(
+                    FPS = 0,
+                    spriteSheetResource = it.imageResId,
+                    rows = 1,
+                    cols = 1,
+                    rowsIgnore = 0,
+                    rowsAnimated = 1,
+                    colsAnimated = 1,
+                    modifier = Modifier.align(Alignment.Center)
                         .clickable(
                             role = Role.Image,
                             indication = null,
@@ -256,16 +257,16 @@ private fun Monster(
                 .fillMaxSize()
                 .padding(20.dp)
         ) {
-            IconAndCount(
-                monsterUiStage = monsterUiState.currentMonster?.rewardValue.toString(),
-                horArrangement = Arrangement.Center,
-                verAlignment = Alignment.Bottom,
-                iconImage = R.drawable.icone_coin,
-                fontSize = 20,
-                iconSize = 24,
-                modifier = Modifier
-            )
             monsterUiState.currentMonster?.let {
+                IconAndCount(
+                    monsterUiStage = formatBigDecimalNumber(it.rewardValue),
+                    horArrangement = Arrangement.Center,
+                    verAlignment = Alignment.Bottom,
+                    iconImage = R.drawable.icone_coin,
+                    fontSize = 20,
+                    iconSize = 24,
+                    modifier = Modifier
+                )
                 IconAndCount(
                     monsterUiStage = it.deathCount.toString(),
                     horArrangement = Arrangement.Center,
@@ -276,7 +277,6 @@ private fun Monster(
                     modifier = Modifier
                 )
             }
-
         }
     }
 }

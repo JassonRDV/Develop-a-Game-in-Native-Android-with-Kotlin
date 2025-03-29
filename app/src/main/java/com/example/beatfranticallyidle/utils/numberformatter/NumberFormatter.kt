@@ -2,6 +2,7 @@ package com.example.beatfranticallyidle.utils.numberformatter
 
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.RoundingMode
 
 fun formatBigIntegerNumber(value: BigInteger): String {
 
@@ -21,7 +22,9 @@ fun formatBigIntegerNumber(value: BigInteger): String {
         "%.0e".format(BigDecimal(value))
     } else {
         val divisor = BigInteger.TEN.pow(unitIndex * 3)
-        val formattedValue = BigDecimal(value).divide(BigDecimal(divisor))
+        val formattedValue = BigDecimal(value).divide(
+            BigDecimal(divisor), 2, RoundingMode.HALF_UP
+        )
         "${formattedValue.intValueExact()}${units[unitIndex]}"
     }
 }
@@ -44,7 +47,9 @@ fun formatBigDecimalNumber(value: BigDecimal): String {
         "%.0e".format(value)
     } else {
         val divisor = BigDecimal.TEN.pow(unitIndex * 3)
-        val formattedValue = value.divide(divisor)
+        val formattedValue = value.divide(
+            divisor, 2, RoundingMode.HALF_UP
+        )
         "${formattedValue.intValueExact()}${units[unitIndex]}"
     }
 }
