@@ -1,9 +1,9 @@
-<table>
+<table style = "border-collapse: collapse;">
   <tr>
-    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/1.png" width="200"></td>
-    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/2.png" width="200"></td>
-    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/3.png" width="200"></td>
-    <td><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/4.png" width="200"></td>
+    <td style = "border: none;"><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/1.png" width="200"></td>
+    <td style = "border: none;"><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/2.png" width="200"></td>
+    <td style = "border: none;"><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/3.png" width="200"></td>
+    <td style = "border: none;"><img src="https://github.com/JassonRDV/Develop-a-Game-in-Native-Android-with-Kotlin/blob/master/images/4.png" width="200"></td>
   </tr>
 </table>
 
