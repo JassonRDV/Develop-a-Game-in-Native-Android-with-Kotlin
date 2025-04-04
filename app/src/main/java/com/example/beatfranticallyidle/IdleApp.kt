@@ -8,8 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -31,15 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.beatfranticallyidle.ui.components.bar.BottomBar
-import com.example.beatfranticallyidle.ui.components.bar.TopBar
-import com.example.beatfranticallyidle.ui.screen.game.mainscreen.MainScreen
-import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
-import com.example.beatfranticallyidle.viewmodel.CardUiState
-import com.example.beatfranticallyidle.viewmodel.CardViewModel
-import com.example.beatfranticallyidle.viewmodel.MonsterViewModel
-import com.example.beatfranticallyidle.viewmodel.RewardViewModel
-import com.example.beatfranticallyidle.viewmodel.SoundsViewModel
+import com.example.beatfranticallyidle.game_ui.components.bar.BottomBar
+import com.example.beatfranticallyidle.game_ui.components.bar.TopBar
+import com.example.beatfranticallyidle.game_screen.main_screen.MainScreen
+import com.example.beatfranticallyidle.game_ui.theme.BeatFranticallyIdleTheme
+import com.example.beatfranticallyidle.game_screen.main_screen.viewmodel.CardUiState
+import com.example.beatfranticallyidle.game_screen.main_screen.viewmodel.CardViewModel
+import com.example.beatfranticallyidle.game_screen.main_screen.viewmodel.MonsterViewModel
+import com.example.beatfranticallyidle.game_screen.main_screen.viewmodel.RewardViewModel
+import com.example.beatfranticallyidle.game_sfx.SoundsViewModel
 
 sealed class HeroCardRoute(val route: String) {
     data object FireHero : HeroCardRoute("FireHero")

@@ -4,12 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.Modifier
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.example.beatfranticallyidle.ui.theme.BeatFranticallyIdleTheme
+import com.example.beatfranticallyidle.game_ui.theme.BeatFranticallyIdleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
