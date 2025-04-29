@@ -10,6 +10,7 @@
 # Beat Frantically - Idle Game for Android
 
 **Active Development Project: Native Android Game (Kotlin/Jetpack Compose)**
+
 This game is currently in its early stages of development, with the core gameplay not yet implemented. The technologies and gameplay are experimental and may evolve significantly.
 
 **Technologies Used:**
