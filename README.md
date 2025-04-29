@@ -7,15 +7,7 @@
   </tr>
 </table>
 
-# 👾 Beat Frantically - Idle DPS Android Game (Job Application Challenge) 🚀
-
-**Purpose:** 🎯 This project, "Beat Frantically," an idle DPS game for Android, was developed as a demonstration of skills for a job application. It showcases native Android development with Kotlin, utilizing various Android Jetpack components and architectural patterns. 💡
-
-**Game Features:**
-* 👹 Dynamic Monsters: Each monster has unique difficulty levels and rewards (*under development*).
-* 📈 Progressive Gameplay: Use rewards to level up.
-* 💀 Death Tracking: Persistent tracking of the number of monster deaths.
-* 📱 Vertical 2D: Experience optimized for mobile devices.
+# Beat Frantically - Idle Game for Android
 
 **Technologies Used:**
 <p align="left">
@@ -29,7 +21,7 @@
   <img src="https://img.shields.io/badge/Hilt-00D1FE?style=for-the-badge&logo=android&logoColor=white" alt="Hilt"/>
 </p>
 
-**Skills:** 💻 Android development, 🚀 Kotlin, 🕹️ Game development fundamentals, 💾 Local persistence with Room, 🧭 Navigation Component, 🔄 Background tasks with Flow, 🏗️ Dependency Injection with Hilt, 🏛️ MVVM Architecture
+**Skills:** Android development, Kotlin, Local persistence with Room, Navigation Component, Dependency Injection with Hilt, MVVM Architecture
 
 **Contact:**
 <p align="left">
